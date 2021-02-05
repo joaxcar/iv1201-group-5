@@ -1,5 +1,12 @@
+import CssBaseline from "@material-ui/core/CssBaseline";
+
 function App() {
-	return <>Recruitment Application UI</>;
+	return (
+		<>
+			<CssBaseline />
+			Recruitment Application UI
+		</>
+	);
 }
 
 export default App;
