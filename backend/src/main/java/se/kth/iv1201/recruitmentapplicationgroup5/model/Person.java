@@ -23,11 +23,11 @@ public class Person {
 		
 	}
 
-	public Name getName() {
+	public FullName getName() {
 		return name;
 	}
 
-	public void setName(Name name) {
+	public void setName(FullName name) {
 		this.name = name;
 	}
 

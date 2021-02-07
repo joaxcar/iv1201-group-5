@@ -1,18 +1,14 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.model;
 
-import java.util.Collection;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-
 
 /*
  * Class representing an account in the system. 
  */
+
 @Entity
 public class Account {
 	
