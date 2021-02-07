@@ -14,9 +14,10 @@ public class Person {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int id;
-	private Name name;
+	private FullName name;
 	private BirthDate birthDate;
 	private String email;
+	private Account account;
 	
 	public Person() {
 		
@@ -44,5 +45,21 @@ public class Person {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 }
