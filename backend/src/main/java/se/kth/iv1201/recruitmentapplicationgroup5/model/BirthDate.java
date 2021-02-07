@@ -1,10 +1,20 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
- * Class representing the birthdate of a person with precision to the day.
+ * Class representing the birthdate of a person with precision to the day, in numbers.
  */
+
+@Entity
 public class BirthDate {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private int id;
 	private int day;
 	private int month;
 	private int year;
