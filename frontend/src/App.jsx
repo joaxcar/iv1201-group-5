@@ -1,6 +1,6 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
 
-import Registration from "./containers/Registration";
+import Registration from "./Registration";
 
 function App() {
 	return (
