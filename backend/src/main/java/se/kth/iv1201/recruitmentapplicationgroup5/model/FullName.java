@@ -58,5 +58,13 @@ public class FullName {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
 	
 }
