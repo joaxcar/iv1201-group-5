@@ -1,8 +1,11 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.Value;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public record DateOfBirthDTO(int year, int month, int day) {
+@Value
+public class DateOfBirthDTO {
+	int year;
+	int month;
+	int day;
 
 }
