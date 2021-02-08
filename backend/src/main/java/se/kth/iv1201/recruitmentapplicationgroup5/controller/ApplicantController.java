@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
+
 @RestController
 @Validated
 public class ApplicantController {
 
-	@PostMapping("/applicant")
-	RegistrationForm newApplicant(@Valid @RequestBody RegistrationForm registerForm) {
+	@PostMapping("/api/v1/applicant")
+	RegistrationDetails newApplicant(@Valid @RequestBody RegistrationDetails registerForm) {
 		return registerForm;
 	}
 
