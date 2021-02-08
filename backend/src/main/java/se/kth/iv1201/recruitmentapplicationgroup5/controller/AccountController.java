@@ -28,7 +28,6 @@ public class AccountController {
 		AccountDTO createdAccount = service.addAccount(registrationDetails);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdAccount.getId())
 				.toUri();
-		String uname = createdAccount.getUsername();
 		return ResponseEntity.created(uri).body(createdAccount);
 	}
 
