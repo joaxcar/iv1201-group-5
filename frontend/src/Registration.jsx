@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
 	Container,
 	TextField,
@@ -5,7 +6,8 @@ import {
 	Typography,
 	Button,
 } from "@material-ui/core";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import { DatePicker } from "@material-ui/pickers";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -13,19 +15,25 @@ const validationSchema = yup.object().shape({
 	firstName: yup.string().required(),
 	lastName: yup.string().required(),
 	email: yup.string().email().required(),
-	birthYear: yup.number().positive().required(),
-	birthMonth: yup.number().min(1).max(12).required(),
-	birthDay: yup.number().min(1).max(31).required(),
+	dateOfBirth: yup.date().required(),
 	username: yup.string().required(),
 	password: yup.string().required().min(8),
 });
 
 function Registration() {
-	const { register, handleSubmit, errors: validationErrors } = useForm({
+	const [date, setDate] = useState(new Date());
+
+	const {
+		register,
+		handleSubmit,
+		errors: validationErrors,
+		control,
+	} = useForm({
 		resolver: yupResolver(validationSchema),
 	});
 
 	function onSubmit(validatedData, event) {
+		const MONTH_ADJUSTER = 1;
 		event.preventDefault();
 		event.target.reset();
 
@@ -36,14 +44,18 @@ function Registration() {
 			},
 			email: validatedData.email,
 			dateOfBirth: {
-				year: validatedData.birthYear,
-				month: validatedData.birthMonth,
-				day: validatedData.birthDay,
+				date: {
+					year: validatedData.dateOfBirth.getFullYear(),
+					month:
+						validatedData.dateOfBirth.getMonth() + MONTH_ADJUSTER,
+					day: validatedData.dateOfBirth.getDate(),
+				},
 			},
 			username: validatedData.username,
 			password: validatedData.password,
 		};
 
+		// TODO: POST DATA
 		console.log(formattedRegistrationData);
 	}
 
@@ -94,44 +106,33 @@ function Registration() {
 							}
 						/>
 					</Grid>
-					<Grid item xs={6} md={4}>
-						<TextField
-							label="Year of birth"
-							name="birthYear"
-							inputRef={register}
-							error={validationErrors.birthYear ? true : false}
-							helperText={
-								validationErrors.birthYear
-									? "Year of birth is required and should be a number"
-									: null
-							}
-						></TextField>
-					</Grid>
-					<Grid item xs={6} md={4}>
-						<TextField
-							label="Month of birth"
-							name="birthMonth"
-							inputRef={register}
-							error={validationErrors.birthMonth ? true : false}
-							helperText={
-								validationErrors.birthMonth
-									? "Month of birth is required and should be a number between 1-12"
-									: null
-							}
-						></TextField>
-					</Grid>
-					<Grid item xs={6} md={4}>
-						<TextField
-							label="Day of birth"
-							name="birthDay"
-							inputRef={register}
-							error={validationErrors.birthDay ? true : false}
-							helperText={
-								validationErrors.birthDay
-									? "Day of birth is required and should be a number between 1-31"
-									: null
-							}
-						></TextField>
+					<Grid item>
+						<Controller
+							name="dateOfBirth"
+							control={control}
+							defaultValue={date}
+							render={() => (
+								<DatePicker
+									value={date}
+									onChange={setDate}
+									variant="inline"
+									autoOk
+									label="Date of birth"
+									openTo="year"
+									format="yyyy-MM-DD"
+									error={
+										validationErrors.dateOfBirth
+											? true
+											: false
+									}
+									helperText={
+										validationErrors.dateOfBirth
+											? "banan"
+											: null
+									}
+								/>
+							)}
+						></Controller>
 					</Grid>
 					<Grid item xs={12}>
 						<TextField
