@@ -12,14 +12,23 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /*
  * Class representing an account in the system. 
  */
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Account {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Setter(AccessLevel.PROTECTED)
 	private int id;
 	
 	@NotNull
@@ -33,40 +42,4 @@ public class Account {
 	
 	@NotEmpty
 	private String password;
-	
-	public Account() {
-		
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
 }
