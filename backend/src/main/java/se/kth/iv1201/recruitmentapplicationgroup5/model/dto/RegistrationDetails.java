@@ -2,6 +2,7 @@ package se.kth.iv1201.recruitmentapplicationgroup5.model.dto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,8 +19,7 @@ public class RegistrationDetails {
 	@NotNull
 	@Valid
 	DateOfBirthDTO dateOfBirth;
-	@NotNull
-	@Size(min = 1)
+	@NotEmpty
 	String username;
 	@NotNull
 	@Size(min = 8)

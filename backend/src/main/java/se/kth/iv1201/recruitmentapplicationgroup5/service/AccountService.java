@@ -10,29 +10,43 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
 
+/**
+ * {@link Service} for {@link Account} logic.
+ *
+ * @author Johan Carlsson
+ */
 @Service
 public class AccountService {
 
 	ModelMapper modelMapper = new ModelMapper();
 
+	/**
+	 * Constructor that configures {@link ModelMapper}.
+	 */
 	public AccountService() {
 		modelMapper.getConfiguration().setFieldMatchingEnabled(true)
 				.setFieldAccessLevel(Configuration.AccessLevel.PRIVATE);
 	}
 
+	/**
+	 * Add a new {@link Account} with the information from
+	 * {@link RegistrationDetails}.
+	 *
+	 * @param registrationDetails - details for new account
+	 */
 	public AccountDTO addAccount(@Valid RegistrationDetails registrationDetails) {
-		Account newAccount = RegistrationToAccount(registrationDetails);
+		Account newAccount = registrationToAccount(registrationDetails);
 		// Add Account to Reposetory
-		AccountDTO newAccountDTO = AccountToDTO(newAccount);
+		AccountDTO newAccountDTO = accountToDTO(newAccount);
 		return newAccountDTO;
 	}
 
-	private Account RegistrationToAccount(final RegistrationDetails details) {
+	private Account registrationToAccount(final RegistrationDetails details) {
 		final Account account = modelMapper.map(details, Account.class);
 		return account;
 	}
 
-	private AccountDTO AccountToDTO(final Account account) {
+	private AccountDTO accountToDTO(final Account account) {
 		final AccountDTO accountDTO = modelMapper.map(account, AccountDTO.class);
 		return accountDTO;
 	}
