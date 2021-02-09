@@ -7,6 +7,7 @@ import javax.validation.constraints.NotEmpty;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.FullName;
 
@@ -17,6 +18,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.FullName;
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Value
+@NoArgsConstructor(force = true)
 public class FullNameDTO {
 	@NotEmpty
 	String first;
