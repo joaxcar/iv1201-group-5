@@ -4,8 +4,10 @@ import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import se.kth.iv1201.recruitmentapplicationgroup5.integration.AccountRepository;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
@@ -19,6 +21,9 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
 public class AccountService {
 
 	ModelMapper modelMapper = new ModelMapper();
+
+	@Autowired
+	AccountRepository repository;
 
 	/**
 	 * Constructor that configures {@link ModelMapper}.
@@ -36,7 +41,7 @@ public class AccountService {
 	 */
 	public AccountDTO addAccount(@Valid RegistrationDetails registrationDetails) {
 		Account newAccount = registrationToAccount(registrationDetails);
-		// Add Account to Reposetory
+		newAccount = repository.save(newAccount);
 		AccountDTO newAccountDTO = accountToDTO(newAccount);
 		return newAccountDTO;
 	}
