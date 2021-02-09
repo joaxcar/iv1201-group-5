@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /*
- * Class representing an account in the system. 
+ * Class representing an account in the system. Has username, password and person.
  */
 @Entity
 @Getter

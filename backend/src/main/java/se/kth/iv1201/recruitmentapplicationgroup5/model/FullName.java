@@ -9,13 +9,22 @@ import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 
 
 /**
- * Class representing the name of a person.
+ * Class representing the name of a person, including firstName and lastName.
  */
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class FullName {
 	
 	@Id
@@ -31,40 +40,4 @@ public class FullName {
 	@JsonBackReference
 	@OneToOne(mappedBy = "name")
 	private Person person;
-
-	public FullName() {
-		
-	}
-
-	/**
-	 * Creates an instance of name as firstName lastName
-	 * @param firstName First name
-	 * @param lastName Last name
-	 */
-	public FullName(String firstName, String lastName) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-	}
-	
-	public String getFirstName() {
-		return firstName;
-	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	public String getLastName() {
-		return lastName;
-	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
-	}
-	
 }

@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /*
- * Class representing a person that have created an account in the application.
+ * Class representing a person that have created an account in the application. Contains name, birthdate, email and account.
  */
 @Entity
 @Getter
