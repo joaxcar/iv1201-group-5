@@ -9,13 +9,11 @@ import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-
-
 
 /**
  * Class representing the name of a person, including firstName and lastName.
@@ -26,17 +24,18 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FullName {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Setter(AccessLevel.PROTECTED)
 	private int id;
-	
+
 	@NotEmpty
 	private String firstName;
-	
+
 	@NotEmpty
 	private String lastName;
-	
+
 	@JsonBackReference
 	@OneToOne(mappedBy = "name")
 	private Person person;
