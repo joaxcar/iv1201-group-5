@@ -20,7 +20,7 @@ const validationSchema = yup.object().shape({
 	password: yup.string().required().min(8),
 });
 
-function Registration() {
+function Registration({ onSubmit }) {
 	const [date, setDate] = useState(new Date());
 
 	const {
@@ -31,33 +31,6 @@ function Registration() {
 	} = useForm({
 		resolver: yupResolver(validationSchema),
 	});
-
-	function onSubmit(validatedData, event) {
-		const MONTH_ADJUSTER = 1;
-		event.preventDefault();
-		event.target.reset();
-
-		const formattedRegistrationData = {
-			name: {
-				first: validatedData.firstName,
-				last: validatedData.lastName,
-			},
-			email: validatedData.email,
-			dateOfBirth: {
-				date: {
-					year: validatedData.dateOfBirth.getFullYear(),
-					month:
-						validatedData.dateOfBirth.getMonth() + MONTH_ADJUSTER,
-					day: validatedData.dateOfBirth.getDate(),
-				},
-			},
-			username: validatedData.username,
-			password: validatedData.password,
-		};
-
-		// TODO: POST DATA
-		console.log(formattedRegistrationData);
-	}
 
 	return (
 		<Container maxWidth="sm">
