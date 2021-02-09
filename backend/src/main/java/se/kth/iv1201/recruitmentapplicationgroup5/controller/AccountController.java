@@ -13,15 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
 import se.kth.iv1201.recruitmentapplicationgroup5.service.AccountService;
 
 /**
- * A {@link RestController} for {@link Account} handeling.
+ * REST controller handling user accounts.
  *
- * @author Johan Carlsson
  */
 @RestController
 @Validated
@@ -32,7 +30,7 @@ public class AccountController {
 	private AccountService service;
 
 	/**
-	 * A {@link PostMapping} for account creation.
+	 * REST endpoint for account creation.
 	 *
 	 * @param registrationDetails - registration details for a new account
 	 */
