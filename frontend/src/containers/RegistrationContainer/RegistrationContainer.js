@@ -1,8 +1,8 @@
 import Registration from "../../components/Registration/Registration";
-import { ACCOUNT } from "../../properties/endpoints";
+import { ACCOUNTS } from "../../properties/endpoints";
 
 function postRegistrationDetails(registrationDetails) {
-	return fetch(ACCOUNT, {
+	return fetch(ACCOUNTS, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -11,29 +11,34 @@ function postRegistrationDetails(registrationDetails) {
 	}).then((response) => response.json());
 }
 
-function handleFormSubmit(validatedData, event) {
+function formatDetails(registrationDetails) {
 	const MONTH_ADJUSTER = 1;
+	return {
+		name: {
+			first: registrationDetails.firstName,
+			last: registrationDetails.lastName,
+		},
+		email: registrationDetails.email,
+		dateOfBirth: {
+			date: {
+				year: registrationDetails.dateOfBirth.getFullYear(),
+				month:
+					registrationDetails.dateOfBirth.getMonth() + MONTH_ADJUSTER,
+				day: registrationDetails.dateOfBirth.getDate(),
+			},
+		},
+		username: registrationDetails.username,
+		password: registrationDetails.password,
+	};
+}
+
+function handleFormSubmit(registrationDetails, event) {
 	event.preventDefault();
 	event.target.reset();
 
-	const formattedRegistrationData = {
-		name: {
-			first: validatedData.firstName,
-			last: validatedData.lastName,
-		},
-		email: validatedData.email,
-		dateOfBirth: {
-			date: {
-				year: validatedData.dateOfBirth.getFullYear(),
-				month: validatedData.dateOfBirth.getMonth() + MONTH_ADJUSTER,
-				day: validatedData.dateOfBirth.getDate(),
-			},
-		},
-		username: validatedData.username,
-		password: validatedData.password,
-	};
+	const formattedRegistrationDetails = formatDetails(registrationDetails);
 
-	postRegistrationDetails(formattedRegistrationData)
+	postRegistrationDetails(formattedRegistrationDetails)
 		.then(console.log)
 		.catch(console.log);
 }
