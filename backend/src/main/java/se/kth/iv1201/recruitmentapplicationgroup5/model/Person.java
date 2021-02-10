@@ -18,14 +18,23 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /*
- * Class representing a person that have created an account in the application.
+ * Class representing a person that have created an account in the application. Contains name, birthdate, email and account.
  */
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Person {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Setter(AccessLevel.PROTECTED)
 	private int id;
 	
 	@NotNull
@@ -46,48 +55,5 @@ public class Person {
 	@JsonBackReference
 	@OneToOne(mappedBy = "person")
 	private Account account;
-	
-	public Person() {
-		
-	}
 
-	public FullName getName() {
-		return name;
-	}
-
-	public void setName(FullName name) {
-		this.name = name;
-	}
-
-	public LocalDate getBirthDate() {
-		return birthDate;
-	}
-
-	public void setBirthDate(LocalDate birthDate) {
-		this.birthDate = birthDate;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Account getAccount() {
-		return account;
-	}
-
-	public void setAccount(Account account) {
-		this.account = account;
-	}
 }
