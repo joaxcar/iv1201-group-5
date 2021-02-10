@@ -13,7 +13,7 @@ const validationSchema = yup.object().shape({
 	firstName: yup.string().required(),
 	lastName: yup.string().required(),
 	email: yup.string().email().required(),
-	dateOfBirth: yup.date().required(),
+	dateOfBirth: yup.date().max(new Date()).required(),
 	username: yup.string().required(),
 	password: yup.string().required().min(8),
 });
@@ -77,11 +77,10 @@ function Registration({ onSubmit }) {
 							inputRef={register}
 							fullWidth
 							type="date"
-							format="yyyy-MM-DD"
 							error={validationErrors.dateOfBirth ? true : false}
 							helperText={
 								validationErrors.dateOfBirth
-									? "Incorrect date format"
+									? "Date should be in the format yyyy-mm-dd and not be later than today"
 									: null
 							}
 							InputLabelProps={{ shrink: true }}

@@ -1,3 +1,3 @@
-const ACCOUNTS = "http://localhost:8080/api/v1/accounts";
+const ACCOUNTS = "/api/v1/accounts";
 
 export { ACCOUNTS };
