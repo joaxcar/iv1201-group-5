@@ -1,3 +1,5 @@
-const ACCOUNTS = "/api/v1/accounts";
+const endpoints = {
+	ACCOUNTS: "/api/v1/accounts",
+};
 
-export { ACCOUNTS };
+export default endpoints;

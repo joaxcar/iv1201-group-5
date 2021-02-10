@@ -1,3 +1,11 @@
+function handleResponse(response) {
+	if (![200, 201].includes(response.status)) {
+		throw new Error("Something went wrong");
+	} else {
+		return response.json();
+	}
+}
+
 function postToAPI(
 	endpoint,
 	body,
@@ -7,7 +15,7 @@ function postToAPI(
 		method: "POST",
 		headers,
 		body: JSON.stringify(body),
-	}).then((response) => response.json());
+	}).then(handleResponse);
 }
 
 export { postToAPI };
