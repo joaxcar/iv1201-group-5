@@ -1,16 +1,6 @@
 import Registration from "../../components/Registration/Registration";
 import { ACCOUNTS } from "../../properties/endpoints";
-
-function postRegistrationDetails(registrationDetails) {
-	console.log(registrationDetails);
-	return fetch(ACCOUNTS, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(registrationDetails),
-	}).then((response) => response.json());
-}
+import { postToAPI } from "../../util/network";
 
 function formatDetails(registrationDetails) {
 	const MONTH_ADJUSTER = 1;
@@ -36,7 +26,7 @@ function handleFormSubmit(registrationDetails, event) {
 
 	const formattedRegistrationDetails = formatDetails(registrationDetails);
 
-	postRegistrationDetails(formattedRegistrationDetails)
+	postToAPI(ACCOUNTS, formattedRegistrationDetails)
 		.then(console.log)
 		.catch(console.log);
 }
