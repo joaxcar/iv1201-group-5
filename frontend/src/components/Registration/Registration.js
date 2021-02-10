@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
 	Container,
 	TextField,
@@ -6,8 +5,7 @@ import {
 	Typography,
 	Button,
 } from "@material-ui/core";
-import { useForm, Controller } from "react-hook-form";
-import { DatePicker } from "@material-ui/pickers";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -21,14 +19,7 @@ const validationSchema = yup.object().shape({
 });
 
 function Registration({ onSubmit }) {
-	const [date, setDate] = useState(new Date());
-
-	const {
-		register,
-		handleSubmit,
-		errors: validationErrors,
-		control,
-	} = useForm({
+	const { register, handleSubmit, errors: validationErrors } = useForm({
 		resolver: yupResolver(validationSchema),
 	});
 
@@ -65,7 +56,7 @@ function Registration({ onSubmit }) {
 							}
 						/>
 					</Grid>
-					<Grid item xs={12}>
+					<Grid item xs={12} sm={6}>
 						<TextField
 							label="E-mail address"
 							name="email"
@@ -79,33 +70,22 @@ function Registration({ onSubmit }) {
 							}
 						/>
 					</Grid>
-					<Grid item>
-						<Controller
+					<Grid item xs={12} sm={6}>
+						<TextField
+							label="Date of birth yyyy-mm-dd"
 							name="dateOfBirth"
-							control={control}
-							defaultValue={date}
-							render={() => (
-								<DatePicker
-									value={date}
-									onChange={setDate}
-									variant="inline"
-									autoOk
-									label="Date of birth"
-									openTo="year"
-									format="yyyy-MM-DD"
-									error={
-										validationErrors.dateOfBirth
-											? true
-											: false
-									}
-									helperText={
-										validationErrors.dateOfBirth
-											? "banan"
-											: null
-									}
-								/>
-							)}
-						></Controller>
+							inputRef={register}
+							fullWidth
+							type="date"
+							format="yyyy-MM-DD"
+							error={validationErrors.dateOfBirth ? true : false}
+							helperText={
+								validationErrors.dateOfBirth
+									? "Incorrect date format"
+									: null
+							}
+							InputLabelProps={{ shrink: true }}
+						/>
 					</Grid>
 					<Grid item xs={12}>
 						<TextField

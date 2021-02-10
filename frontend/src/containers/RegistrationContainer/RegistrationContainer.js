@@ -2,6 +2,7 @@ import Registration from "../../components/Registration/Registration";
 import { ACCOUNTS } from "../../properties/endpoints";
 
 function postRegistrationDetails(registrationDetails) {
+	console.log(registrationDetails);
 	return fetch(ACCOUNTS, {
 		method: "POST",
 		headers: {
@@ -20,12 +21,9 @@ function formatDetails(registrationDetails) {
 		},
 		email: registrationDetails.email,
 		dateOfBirth: {
-			date: {
-				year: registrationDetails.dateOfBirth.getFullYear(),
-				month:
-					registrationDetails.dateOfBirth.getMonth() + MONTH_ADJUSTER,
-				day: registrationDetails.dateOfBirth.getDate(),
-			},
+			year: registrationDetails.dateOfBirth.getFullYear(),
+			month: registrationDetails.dateOfBirth.getMonth() + MONTH_ADJUSTER,
+			day: registrationDetails.dateOfBirth.getDate(),
 		},
 		username: registrationDetails.username,
 		password: registrationDetails.password,
