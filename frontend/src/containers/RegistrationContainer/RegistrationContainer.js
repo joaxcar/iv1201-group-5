@@ -23,6 +23,9 @@ function formatDetails(registrationDetails) {
 	};
 }
 
+/**
+ * Container for Registration.
+ */
 function RegistrationContainer() {
 	const [alert, setAlert] = useState({ open: false, type: "", message: "" });
 
@@ -49,7 +52,7 @@ function RegistrationContainer() {
 	return (
 		<>
 			{alert.open ? (
-				<Alert type={alert.type}>{alert.message}</Alert>
+				<Alert type={alert.type} message={alert.message} />
 			) : null}
 			<Registration onSubmit={handleFormSubmit} />
 		</>

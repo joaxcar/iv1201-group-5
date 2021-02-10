@@ -18,6 +18,10 @@ const validationSchema = yup.object().shape({
 	password: yup.string().required().min(8),
 });
 
+/**
+ * Form for registrating new users.
+ * @param {function} onSubmit - The callback function to run on submit
+ */
 function Registration({ onSubmit }) {
 	const { register, handleSubmit, errors: validationErrors } = useForm({
 		resolver: yupResolver(validationSchema),

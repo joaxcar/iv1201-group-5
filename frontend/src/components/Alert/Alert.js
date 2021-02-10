@@ -2,7 +2,13 @@ import { useState } from "react";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
-function Alert({ type, children }) {
+/**
+ * A component that shows up at the bottom of the screen
+ * for six seconds and display a message to the user.
+ * @param {alertType} type - The type of alert
+ * @param {string} message - The message to show
+ */
+function Alert({ type, message }) {
 	const [open, setOpen] = useState(true);
 
 	const handleClose = (event, reason) => {
@@ -21,7 +27,7 @@ function Alert({ type, children }) {
 				onClose={handleClose}
 				severity={type}
 			>
-				{children}
+				{message}
 			</MuiAlert>
 		</Snackbar>
 	);
