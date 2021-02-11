@@ -13,39 +13,19 @@ const validationSchema = yup.object().shape({
 	firstName: yup.string().required(),
 	lastName: yup.string().required(),
 	email: yup.string().email().required(),
-	birthYear: yup.number().positive().required(),
-	birthMonth: yup.number().min(1).max(12).required(),
-	birthDay: yup.number().min(1).max(31).required(),
+	dateOfBirth: yup.date().max(new Date()).required(),
 	username: yup.string().required(),
 	password: yup.string().required().min(8),
 });
 
-function Registration() {
+/**
+ * Form for registrating new users.
+ * @param {function} onSubmit - The callback function to run on submit
+ */
+function Registration({ onSubmit }) {
 	const { register, handleSubmit, errors: validationErrors } = useForm({
 		resolver: yupResolver(validationSchema),
 	});
-
-	function onSubmit(validatedData, event) {
-		event.preventDefault();
-		event.target.reset();
-
-		const formattedRegistrationData = {
-			name: {
-				first: validatedData.firstName,
-				last: validatedData.lastName,
-			},
-			email: validatedData.email,
-			dateOfBirth: {
-				year: validatedData.birthYear,
-				month: validatedData.birthMonth,
-				day: validatedData.birthDay,
-			},
-			username: validatedData.username,
-			password: validatedData.password,
-		};
-
-		console.log(formattedRegistrationData);
-	}
 
 	return (
 		<Container maxWidth="sm">
@@ -80,7 +60,7 @@ function Registration() {
 							}
 						/>
 					</Grid>
-					<Grid item xs={12}>
+					<Grid item xs={12} sm={6}>
 						<TextField
 							label="E-mail address"
 							name="email"
@@ -94,44 +74,21 @@ function Registration() {
 							}
 						/>
 					</Grid>
-					<Grid item xs={6} md={4}>
+					<Grid item xs={12} sm={6}>
 						<TextField
-							label="Year of birth"
-							name="birthYear"
+							label="Date of birth yyyy-mm-dd"
+							name="dateOfBirth"
 							inputRef={register}
-							error={validationErrors.birthYear ? true : false}
+							fullWidth
+							type="date"
+							error={validationErrors.dateOfBirth ? true : false}
 							helperText={
-								validationErrors.birthYear
-									? "Year of birth is required and should be a number"
+								validationErrors.dateOfBirth
+									? "Date should be in the format yyyy-mm-dd and not be later than today"
 									: null
 							}
-						></TextField>
-					</Grid>
-					<Grid item xs={6} md={4}>
-						<TextField
-							label="Month of birth"
-							name="birthMonth"
-							inputRef={register}
-							error={validationErrors.birthMonth ? true : false}
-							helperText={
-								validationErrors.birthMonth
-									? "Month of birth is required and should be a number between 1-12"
-									: null
-							}
-						></TextField>
-					</Grid>
-					<Grid item xs={6} md={4}>
-						<TextField
-							label="Day of birth"
-							name="birthDay"
-							inputRef={register}
-							error={validationErrors.birthDay ? true : false}
-							helperText={
-								validationErrors.birthDay
-									? "Day of birth is required and should be a number between 1-31"
-									: null
-							}
-						></TextField>
+							InputLabelProps={{ shrink: true }}
+						/>
 					</Grid>
 					<Grid item xs={12}>
 						<TextField
