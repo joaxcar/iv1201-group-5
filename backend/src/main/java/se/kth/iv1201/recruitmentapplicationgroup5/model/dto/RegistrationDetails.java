@@ -10,18 +10,18 @@ import lombok.Value;
 
 @Value
 public class RegistrationDetails {
-	@NotNull
+	@NotNull(message = "Must have field: name")
 	@Valid
 	FullNameDTO name;
-	@NotNull
-	@Email
+	@NotNull(message = "Must have field: email")
+	@Email(message = "Invalid email format") 
 	String email;
-	@NotNull
+	@NotNull(message = "Must have field: dateOfBirth")
 	@Valid
 	DateOfBirthDTO dateOfBirth;
-	@NotEmpty
+	@NotEmpty(message = "Field username must be atleast one letter")
 	String username;
-	@NotNull
-	@Size(min = 8)
+	@NotNull(message = "Must have field: password")
+	@Size(min = 8, message = "password must be atleast 8 characters long")
 	String password;
 }
