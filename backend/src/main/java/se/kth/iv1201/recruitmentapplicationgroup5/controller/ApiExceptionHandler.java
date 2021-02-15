@@ -15,8 +15,7 @@ import org.springframework.web.context.request.WebRequest;
  *
  */
 @ControllerAdvice
-public class ApiExceptionHandler //extends ResponseEntityExceptionHandler 
-{
+public class ApiExceptionHandler {
 	
 	//Logger here as a private field
 	
