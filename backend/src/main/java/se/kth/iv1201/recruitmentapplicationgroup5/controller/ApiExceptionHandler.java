@@ -1,5 +1,7 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.controller;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,16 +21,32 @@ public class ApiExceptionHandler //extends ResponseEntityExceptionHandler
 	//Logger here
 	
 	@ExceptionHandler(value = MethodArgumentNotValidException.class)
-	public ResponseEntity<ErrorMsgBody> handleValidationException(
+	public ResponseEntity<Object> handleValidationException(
 			MethodArgumentNotValidException e, 
 			WebRequest req)
 	{
 		var status = HttpStatus.BAD_REQUEST;
 		String url = extractUrl(req);
 		String errorMsg = generateErrMsg(e);
-		var body = new ErrorMsgBody(status.value(), url, errorMsg);
+		var body = createErrorBody(status, url, errorMsg);
 
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+		return ResponseEntity.status(status).body(body);
+	}
+	
+	@ExceptionHandler(value = ConstraintViolationException.class)
+	public ResponseEntity<Object> handleContraintViolationException(
+			ConstraintViolationException e,
+			WebRequest req)
+	{
+		//Log error here instead of System.out
+		System.out.println(e);
+		System.out.println(req);
+		
+		var status = HttpStatus.INTERNAL_SERVER_ERROR;
+		String url = extractUrl(req);
+		String errorMsg = "Something went wrong on our end. Try again.";
+		var body = createErrorBody(status, url, errorMsg);
+		return ResponseEntity.status(status).body(body);
 	}
 	
 	private String extractUrl(WebRequest req) {
@@ -39,6 +57,10 @@ public class ApiExceptionHandler //extends ResponseEntityExceptionHandler
 		return e.getFieldErrors().stream()
 				.map(error -> error.getDefaultMessage())
 				.reduce("", (acc, element) -> acc + element + "; ");
+	}
+	
+	private ErrorMsgBody createErrorBody(HttpStatus status, String url, String msg) {
+		return new ErrorMsgBody(status.value(), url, msg);
 	}
 	
 	
