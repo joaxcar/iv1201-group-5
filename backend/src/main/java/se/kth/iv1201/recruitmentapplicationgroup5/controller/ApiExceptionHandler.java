@@ -18,7 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 public class ApiExceptionHandler //extends ResponseEntityExceptionHandler 
 {
 	
-	//Logger here
+	//Logger here as a private field
 	
 	@ExceptionHandler(value = MethodArgumentNotValidException.class)
 	public ResponseEntity<Object> handleValidationException(
@@ -38,10 +38,19 @@ public class ApiExceptionHandler //extends ResponseEntityExceptionHandler
 			ConstraintViolationException e,
 			WebRequest req)
 	{
+		return handleInternalError(e, req);
+	}
+	
+	@ExceptionHandler(value = Exception.class)
+	public ResponseEntity<Object> handleAllExceptions(Exception e, WebRequest req) {
+		return handleInternalError(e, req);
+	}
+	
+	private ResponseEntity<Object> handleInternalError(Exception e, WebRequest req) {
 		//Log error here instead of System.out
 		System.out.println(e);
 		System.out.println(req);
-		
+						
 		var status = HttpStatus.INTERNAL_SERVER_ERROR;
 		String url = extractUrl(req);
 		String errorMsg = "Something went wrong on our end. Try again.";
