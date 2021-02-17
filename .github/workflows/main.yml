@@ -9,6 +9,9 @@ on:
       - dev
       - main
     types: [opened, synchronize, reopened]
+defaults:
+  run:
+    working-directory: ./backend
 jobs:
   test:
     name: Test
@@ -51,7 +54,6 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
-        working-directory: ./backend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
