@@ -9,6 +9,9 @@ on:
       - main
   workflow_dispatch:
 
+defaults:
+  run:
+    working-directory: ./backend
 jobs:
   build-and-deploy:
     runs-on: 'ubuntu-latest'
@@ -23,6 +26,7 @@ jobs:
         password: ${{ secrets.AzureAppService_ContainerPassword_59fd3efcb2634330ac7f0948aea7d38a }}
 
     - run: |
+        ./mvnw package
         docker build . -t iv1201project.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_fa56221b27f047eaaaae514924ac7b75 }}/regapp:${{ github.sha }}
         docker push iv1201project.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_fa56221b27f047eaaaae514924ac7b75 }}/regapp:${{ github.sha }}
 
