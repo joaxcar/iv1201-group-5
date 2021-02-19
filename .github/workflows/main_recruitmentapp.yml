@@ -1,0 +1,35 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - recruitmentapp
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: https://iv1201project.azurecr.io/
+        username: ${{ secrets.AzureAppService_ContainerUsername_fa56221b27f047eaaaae514924ac7b75 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_59fd3efcb2634330ac7f0948aea7d38a }}
+
+    - run: |
+        docker build . -t iv1201project.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_fa56221b27f047eaaaae514924ac7b75 }}/regapp:${{ github.sha }}
+        docker push iv1201project.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_fa56221b27f047eaaaae514924ac7b75 }}/regapp:${{ github.sha }}
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'recruitmentapp'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_60c334a45a5e437dadc1aabf94a93489 }}
+        images: 'iv1201project.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_fa56221b27f047eaaaae514924ac7b75 }}/regapp:${{ github.sha }}'
