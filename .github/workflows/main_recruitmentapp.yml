@@ -34,18 +34,18 @@ jobs:
     - uses: azure/docker-login@v1
       with:
         login-server: https://iv1201project.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_fa56221b27f047eaaaae514924ac7b75 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_59fd3efcb2634330ac7f0948aea7d38a }}
+        username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}
+        password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD }}
 
     - run: |
-        mvn package
-        docker build . -t iv1201project.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_fa56221b27f047eaaaae514924ac7b75 }}/regapp:${{ github.sha }}
-        docker push iv1201project.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_fa56221b27f047eaaaae514924ac7b75 }}/regapp:${{ github.sha }}
+        mvn -B package
+        docker build . -t iv1201project.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}/regapp:${{ github.sha }}
+        docker push iv1201project.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}/regapp:${{ github.sha }}
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'recruitmentapp'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_60c334a45a5e437dadc1aabf94a93489 }}
-        images: 'iv1201project.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_fa56221b27f047eaaaae514924ac7b75 }}/regapp:${{ github.sha }}'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        images: 'iv1201project.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}/regapp:${{ github.sha }}'
