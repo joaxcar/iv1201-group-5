@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Class for encapsulating non default exception handling in one place.
  *
  */
+@Slf4j
 @ControllerAdvice
 public class ApiExceptionHandler {
 	
@@ -26,6 +29,7 @@ public class ApiExceptionHandler {
 			MethodArgumentNotValidException e, 
 			WebRequest req)
 	{
+		log.debug(e.getMessage());
 		var status = HttpStatus.BAD_REQUEST;
 		String url = extractUrl(req);
 		String errorMsg = generateErrMsg(e);
@@ -39,6 +43,7 @@ public class ApiExceptionHandler {
 			HttpMessageNotReadableException e, 
 			WebRequest req) 
 	{
+		log.debug(e.getMessage());
 		var status = HttpStatus.BAD_REQUEST;
 		String url = extractUrl(req);
 		var errorMsg = "Request body invalid JSON";
@@ -52,11 +57,13 @@ public class ApiExceptionHandler {
 			ConstraintViolationException e,
 			WebRequest req)
 	{
+		log.debug(e.getMessage());
 		return handleInternalError(e, req);
 	}
 	
 	@ExceptionHandler(value = Exception.class)
 	public ResponseEntity<Object> handleAllExceptions(Exception e, WebRequest req) {
+		log.debug(e.getMessage());
 		return handleInternalError(e, req);
 	}
 	
