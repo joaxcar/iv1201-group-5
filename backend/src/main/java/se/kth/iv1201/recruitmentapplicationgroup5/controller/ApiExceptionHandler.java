@@ -1,8 +1,5 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
