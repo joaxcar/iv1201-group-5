@@ -1,9 +1,14 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +32,19 @@ public class ApiExceptionHandler {
 		var status = HttpStatus.BAD_REQUEST;
 		String url = extractUrl(req);
 		String errorMsg = generateErrMsg(e);
+		var body = createErrorBody(status, url, errorMsg);
+
+		return ResponseEntity.status(status).body(body);
+	}
+	
+	@ExceptionHandler(value = HttpMessageNotReadableException.class)
+	public ResponseEntity<Object> handleJsonParseException(
+			HttpMessageNotReadableException e, 
+			WebRequest req) 
+	{
+		var status = HttpStatus.BAD_REQUEST;
+		String url = extractUrl(req);
+		var errorMsg = "Request body invalid JSON";
 		var body = createErrorBody(status, url, errorMsg);
 
 		return ResponseEntity.status(status).body(body);
@@ -63,7 +81,7 @@ public class ApiExceptionHandler {
 	
 	private String generateErrMsg(MethodArgumentNotValidException e) {
 		return e.getFieldErrors().stream()
-				.map(error -> error.getDefaultMessage())
+				.map(FieldError::getDefaultMessage)
 				.reduce("", (acc, element) -> acc + element + "; ");
 	}
 	
