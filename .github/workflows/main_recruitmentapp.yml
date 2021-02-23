@@ -16,10 +16,6 @@ jobs:
   build-and-deploy:
     runs-on: 'ubuntu-latest'
 
-    strategy:
-      matrix:
-        node-version: [10.x, 12.x, 14.x]
-
     steps:
     - uses: actions/checkout@v2
 
@@ -28,10 +24,10 @@ jobs:
       with:
         java-version: 15
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 12
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 12
 
     - name: Cache Maven packages
       uses: actions/cache@v2
