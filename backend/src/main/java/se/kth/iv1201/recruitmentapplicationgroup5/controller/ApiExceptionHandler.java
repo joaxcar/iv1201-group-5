@@ -1,5 +1,7 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.controller;
 
+import java.util.Arrays;
+
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
@@ -67,7 +69,7 @@ public class ApiExceptionHandler {
 	
 	private ResponseEntity<Object> handleInternalError(Exception e, WebRequest req) {
 		log.debug(e.getMessage());
-		log.debug(e.getStackTrace().toString());
+		log.debug(Arrays.toString(e.getStackTrace()).replaceAll(",", "\n"));
 						
 		var status = HttpStatus.INTERNAL_SERVER_ERROR;
 		String url = extractUrl(req);
