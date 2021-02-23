@@ -22,8 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 @ControllerAdvice
 public class ApiExceptionHandler {
 	
-	//Logger here as a private field
-	
 	@ExceptionHandler(value = MethodArgumentNotValidException.class)
 	public ResponseEntity<Object> handleValidationException(
 			MethodArgumentNotValidException e, 
@@ -68,9 +66,8 @@ public class ApiExceptionHandler {
 	}
 	
 	private ResponseEntity<Object> handleInternalError(Exception e, WebRequest req) {
-		//Log error here instead of System.out
-		System.out.println(e);
-		System.out.println(req);
+		log.debug(e.getMessage());
+		log.debug(e.getStackTrace().toString());
 						
 		var status = HttpStatus.INTERNAL_SERVER_ERROR;
 		String url = extractUrl(req);
