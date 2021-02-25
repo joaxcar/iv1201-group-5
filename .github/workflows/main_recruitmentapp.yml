@@ -47,6 +47,7 @@ jobs:
         npm ci
         npm run build --if-present
         cd ../backend
+        ls -la src/main/resources/public/
         mvn -B package
         docker build . -t iv1201project.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}/regapp:${{ github.sha }}
         docker push iv1201project.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}/regapp:${{ github.sha }}
