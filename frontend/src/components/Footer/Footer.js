@@ -2,7 +2,7 @@ import { Typography, Container } from "@material-ui/core";
 import classes from "./footer.module.css";
 
 /**
- * The footer of the application, to be used on all screens.
+ * The footer. To be used on all screens.
  */
 function Footer() {
 	return (
