@@ -1,0 +1,51 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - recruitmentapp
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: ./backend
+jobs:
+  build-and-deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@master
+    
+    - name: Set up JDK 15
+      uses: actions/setup-java@v1
+      with:
+        java-version: 15
+    
+    - name: Cache Maven packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: https://iv1201project.azurecr.io/
+        username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}
+        password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD }}
+
+    - run: |
+        mvn -B package
+        docker build . -t iv1201project.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}/regapp:${{ github.sha }}
+        docker push iv1201project.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}/regapp:${{ github.sha }}
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'recruitmentapp'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        images: 'iv1201project.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}/regapp:${{ github.sha }}'

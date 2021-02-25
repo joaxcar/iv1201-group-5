@@ -11,7 +11,6 @@ import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.integration.AccountRepository;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
