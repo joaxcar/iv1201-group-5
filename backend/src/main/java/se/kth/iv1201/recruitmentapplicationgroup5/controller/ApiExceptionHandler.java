@@ -1,7 +1,6 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.validation.ConstraintViolationException;
 
@@ -15,20 +14,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Class for encapsulating non default exception handling in one place.
  *
  */
+@Slf4j
 @ControllerAdvice
 public class ApiExceptionHandler {
-	
-	//Logger here as a private field
 	
 	@ExceptionHandler(value = MethodArgumentNotValidException.class)
 	public ResponseEntity<Object> handleValidationException(
 			MethodArgumentNotValidException e, 
 			WebRequest req)
 	{
+		log.debug(e.getMessage());
 		var status = HttpStatus.BAD_REQUEST;
 		String url = extractUrl(req);
 		String errorMsg = generateErrMsg(e);
@@ -42,6 +43,7 @@ public class ApiExceptionHandler {
 			HttpMessageNotReadableException e, 
 			WebRequest req) 
 	{
+		log.debug(e.getMessage());
 		var status = HttpStatus.BAD_REQUEST;
 		String url = extractUrl(req);
 		var errorMsg = "Request body invalid JSON";
@@ -55,18 +57,19 @@ public class ApiExceptionHandler {
 			ConstraintViolationException e,
 			WebRequest req)
 	{
+		log.debug(e.getMessage());
 		return handleInternalError(e, req);
 	}
 	
 	@ExceptionHandler(value = Exception.class)
 	public ResponseEntity<Object> handleAllExceptions(Exception e, WebRequest req) {
+		log.debug(e.getMessage());
 		return handleInternalError(e, req);
 	}
 	
 	private ResponseEntity<Object> handleInternalError(Exception e, WebRequest req) {
-		//Log error here instead of System.out
-		System.out.println(e);
-		System.out.println(req);
+		log.debug(e.getMessage());
+		log.debug(Arrays.toString(e.getStackTrace()).replaceAll(",", "\n"));
 						
 		var status = HttpStatus.INTERNAL_SERVER_ERROR;
 		String url = extractUrl(req);
