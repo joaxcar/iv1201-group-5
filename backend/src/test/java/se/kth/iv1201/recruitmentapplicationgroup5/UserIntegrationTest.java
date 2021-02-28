@@ -1,6 +1,5 @@
 package se.kth.iv1201.recruitmentapplicationgroup5;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -55,8 +54,34 @@ class UserIntegrationTest {
 				.andExpect(jsonPath("$.password").value("password"));	
 	}
 	
-	public void rejectsInvalidJson() {
-		
+	@Test
+	public void rejectsInvalidJson() throws Exception {
+		var invalidName = "\"name\": \"first\": \"Richard\", \"last\": \"Wallin\"}";
+		var username = "\"username\":\"rillmeister\"";
+		var password = "\"password\":\"password\"";
+		var email = "\"email\":\"asd@hej.se\"";
+		var dateOfBirth = "\"dateOfBirth\": {\"year\": 1900, \"month\": 5, \"day\": 11}";
+		mockMvc.perform(post("/api/v1/accounts")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{" + invalidName + ", " + username + ", " + password + ", " + email + ", " + dateOfBirth + "}"))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.msg").isString())
+				.andExpect(jsonPath("$.url").isString());
+	}
+	
+	@Test
+	public void rejectsInvalidEmail() throws Exception {
+		var invalidName = "\"name\": {\"first\": \"Richard\", \"last\": \"Wallin\"}";
+		var username = "\"username\":\"rillmeister\"";
+		var password = "\"password\":\"password\"";
+		var invalidEmail = "\"email\":\"asdhej.se\"";
+		var dateOfBirth = "\"dateOfBirth\": {\"year\": 1900, \"month\": 5, \"day\": 11}";
+		mockMvc.perform(post("/api/v1/accounts")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{" + invalidName + ", " + username + ", " + password + ", " + invalidEmail + ", " + dateOfBirth + "}"))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.msg").isString())
+				.andExpect(jsonPath("$.url").isString());
 	}
 
 }
