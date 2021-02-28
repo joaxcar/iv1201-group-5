@@ -10,6 +10,9 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.integration.AccountRepository;
@@ -25,7 +28,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
  * {@link se.kth.iv1201.recruitmentapplicationgroup5.model.Account}.
  */
 @Service
-public class AccountService {
+public class AccountService implements UserDetailsService{
 
 	ModelMapper modelMapper = new ModelMapper();
 
@@ -69,12 +72,27 @@ public class AccountService {
 
 	private Account registrationToAccount(final RegistrationDetails details) {
 		final Account account = modelMapper.map(details, Account.class);
+		//TODO: Gör detta! account.setAuthority("APPLICANT");
 		return account;
 	}
 
 	private AccountDTO accountToDTO(final Account account) {
 		final AccountDTO accountDTO = modelMapper.map(account, AccountDTO.class);
 		return accountDTO;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return createMockUser();
+	}
+	
+	
+	private UserDetails createMockUser() {
+		var mockUser = new Account();
+		mockUser.setUsername("testuser");
+		mockUser.setPassword("testpass");
+		mockUser.setAuthority("APPLICANT");
+		return mockUser;
 	}
 
 }
