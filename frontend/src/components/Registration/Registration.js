@@ -8,19 +8,29 @@ import {
 	InputLabel,
 	MenuItem,
 } from "@material-ui/core";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import * as dayjs from "dayjs";
 import classes from "./registration.module.css";
 
-const validationSchema = yup.object().shape({
-	firstName: yup.string().required(),
-	lastName: yup.string().required(),
-	email: yup.string().email().required(),
-	dateOfBirth: yup.date().max(new Date()).required(),
-	username: yup.string().required(),
-	password: yup.string().required().min(8),
-});
+const validationSchema = yup
+	.object()
+	.shape({
+		firstName: yup.string().required(),
+		lastName: yup.string().required(),
+		email: yup.string().email().required(),
+		birthYear: yup.number().positive().required(),
+		birthMonth: yup.number().required(),
+		birthDay: yup.number().positive().max(31).required(),
+		username: yup.string().required(),
+		password: yup.string().required().min(8),
+	})
+	.test("date", "Date must be from the past and be valid", function (value) {
+		return dayjs(
+			`${value.birthYear}-${value.birthMonth}-${value.birthDay}`
+		).isValid();
+	});
 
 function createYearData() {
 	const minimumAgeToApply = 16;
@@ -30,21 +40,25 @@ function createYearData() {
 	return [...Array(65).keys()].map((index) => index + earliestBirthYear);
 }
 
+// function months() {
+// 	return [
+// 		"January",
+// 		"February",
+// 		"March",
+// 		"April",
+// 		"May",
+// 		"June",
+// 		"July",
+// 		"August",
+// 		"September",
+// 		"October",
+// 		"November",
+// 		"December",
+// 	];
+// }
+
 function months() {
-	return [
-		"January",
-		"February",
-		"March",
-		"April",
-		"May",
-		"June",
-		"July",
-		"August",
-		"September",
-		"October",
-		"November",
-		"December",
-	];
+	return [...Array(12).keys()].map((index) => index + 1);
 }
 
 function days() {
@@ -56,9 +70,15 @@ function days() {
  * @param {function} onSubmit - The callback function to run on submit
  */
 function Registration({ onSubmit }) {
-	const { register, handleSubmit, errors: validationErrors } = useForm({
+	const {
+		register,
+		handleSubmit,
+		control,
+		errors: validationErrors,
+	} = useForm({
 		resolver: yupResolver(validationSchema),
 	});
+	console.log(validationErrors);
 
 	return (
 		<Container>
@@ -100,52 +120,74 @@ function Registration({ onSubmit }) {
 							<InputLabel id="selecBirthYear">
 								Year of birth
 							</InputLabel>
-							<Select
-								labelId="selectBirthYear"
+							<Controller
+								as={
+									<Select labelId="selectBirthYear" fullWidth>
+										{createYearData().map((year) => (
+											<MenuItem value={year} key={year}>
+												{year}
+											</MenuItem>
+										))}
+									</Select>
+								}
 								name="birthYear"
-								value={2004}
-								fullWidth
-							>
-								{createYearData().map((year) => (
-									<MenuItem value={year} key={year}>
-										{year}
-									</MenuItem>
-								))}
-							</Select>
+								control={control}
+								defaultValue={2004}
+							/>
 						</Grid>
 						<Grid item xs={4}>
 							<InputLabel id="selecBirthMonth">
 								Month of birth
 							</InputLabel>
-							<Select
-								labelId="selectBirthMonth"
+							<Controller
+								as={
+									<Select
+										labelId="selectBirthMonth"
+										fullWidth
+									>
+										{months().map((month) => (
+											<MenuItem value={month} key={month}>
+												{month}
+											</MenuItem>
+										))}
+									</Select>
+								}
 								name="birthMonth"
-								value={"March"}
-								fullWidth
-							>
-								{months().map((month) => (
-									<MenuItem value={month} key={month}>
-										{month}
-									</MenuItem>
-								))}
-							</Select>
+								defaultValue={1}
+								control={control}
+							/>
 						</Grid>
 						<Grid item xs={4}>
 							<InputLabel id="selecBirthDay">
 								Day of birth
 							</InputLabel>
-							<Select
-								labelId="selectBirthDay"
+							<Controller
+								as={
+									<TextField
+										select
+										fullWidth
+										error={
+											validationErrors.lastName
+												? true
+												: false
+										}
+										helperText={
+											validationErrors.lastName
+												? "Date must be past and valid"
+												: null
+										}
+									>
+										{days().map((day) => (
+											<MenuItem value={day} key={day}>
+												{day}
+											</MenuItem>
+										))}
+									</TextField>
+								}
+								control={control}
 								name="birthDay"
-								value={1}
-								fullWidth
-							>
-								{days().map((day) => (
-									<MenuItem value={day} key={day}>
-										{day}
-									</MenuItem>
-								))}
-							</Select>
+								defaultValue={1}
+							/>
 						</Grid>
 						<Grid item xs={12}>
 							<TextField
