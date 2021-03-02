@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.integration.AccountRepository;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
+import se.kth.iv1201.recruitmentapplicationgroup5.model.Authority;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.DateOfBirthDTO;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
@@ -72,7 +73,7 @@ public class AccountService implements UserDetailsService{
 
 	private Account registrationToAccount(final RegistrationDetails details) {
 		final Account account = modelMapper.map(details, Account.class);
-		//TODO: Gör detta! account.setAuthority("APPLICANT");
+		account.setAuthority(Authority.APPLICANT);
 		return account;
 	}
 
@@ -81,17 +82,35 @@ public class AccountService implements UserDetailsService{
 		return accountDTO;
 	}
 
+	/**OBS: Just nu en mock
+	 * Loads a user from the DB by username. Implementation of userdetailservice funciton needed
+	 * for spring security authentication.
+	 * 
+	 * @param username Username of the account to fetch.
+	 * 
+	 * @return Account details of account with username username
+	 * 
+	 * @throws UsernameNotFoundException Thrown if no account found with username username
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		/* Riktiga funktionen sen
+		var user = repository.findByUsername(username);
+		if(user == null) {
+			throw new UsernameNotFoundException("Invalid user credentials.");
+		}
+		return user;
+		*/
+		
 		return createMockUser();
 	}
 	
-	
+	//TODO: Ta bort denna när man kör på riktigt
 	private UserDetails createMockUser() {
 		var mockUser = new Account();
 		mockUser.setUsername("testuser");
 		mockUser.setPassword("testpass");
-		mockUser.setAuthority("APPLICANT");
+		mockUser.setAuthority(Authority.APPLICANT);
 		return mockUser;
 	}
 

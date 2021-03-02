@@ -53,7 +53,7 @@ public class Account implements UserDetails {
 	@NotEmpty
 	private String password;
 	
-	@NotEmpty
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Authority authority;
 

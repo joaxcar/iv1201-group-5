@@ -10,6 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.service.AccountService;
 
+/**
+ * Class configuring java security, where to get account info and how to encode passwords.
+ *
+ */
 @EnableWebSecurity
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
