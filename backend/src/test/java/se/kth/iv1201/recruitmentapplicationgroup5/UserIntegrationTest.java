@@ -42,6 +42,7 @@ class UserIntegrationTest {
 		var password = "\"password\":\"password\"";
 		var email = "\"email\":\"asd@hej.se\"";
 		var dateOfBirth = "\"dateOfBirth\": {\"year\": 1900, \"month\": 5, \"day\": 11}";
+		
 		mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{" + name + ", " + username + ", " + password + ", " + email + ", " + dateOfBirth + "}"))
