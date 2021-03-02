@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,7 +54,8 @@ public class Account implements UserDetails {
 	private String password;
 	
 	@NotEmpty
-	private String authority;
+	@Enumerated(EnumType.STRING)
+	private Authority authority;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -60,14 +63,14 @@ public class Account implements UserDetails {
 		var grantedAuthority = new GrantedAuthority() {
 
 			private static final long serialVersionUID = 1L;
-			private String authority;
+			private Authority authority;
 		
 			@Override
 			public String getAuthority() {
-				return authority;
+				return authority.getString();
 			}
 			
-			private GrantedAuthority init(String authority) {
+			private GrantedAuthority init(Authority authority) {
 				this.authority = authority;
 				return this;
 			}
