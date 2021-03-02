@@ -4,6 +4,9 @@ import {
 	Grid,
 	Typography,
 	Button,
+	Select,
+	InputLabel,
+	MenuItem,
 } from "@material-ui/core";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -18,6 +21,35 @@ const validationSchema = yup.object().shape({
 	username: yup.string().required(),
 	password: yup.string().required().min(8),
 });
+
+function createYearData() {
+	const minimumAgeToApply = 16;
+	const retirementAge = 65;
+	const lastBirthYearToApply = new Date().getFullYear() - minimumAgeToApply;
+	const earliestBirthYear = lastBirthYearToApply - retirementAge;
+	return [...Array(65).keys()].map((index) => index + earliestBirthYear);
+}
+
+function months() {
+	return [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
+	];
+}
+
+function days() {
+	return [...Array(31).keys()].map((index) => index + 1);
+}
 
 /**
  * Form for registrating new users.
@@ -64,7 +96,58 @@ function Registration({ onSubmit }) {
 								}
 							/>
 						</Grid>
-						<Grid item xs={12} sm={6}>
+						<Grid item xs={4}>
+							<InputLabel id="selecBirthYear">
+								Year of birth
+							</InputLabel>
+							<Select
+								labelId="selectBirthYear"
+								name="birthYear"
+								value={2004}
+								fullWidth
+							>
+								{createYearData().map((year) => (
+									<MenuItem value={year} key={year}>
+										{year}
+									</MenuItem>
+								))}
+							</Select>
+						</Grid>
+						<Grid item xs={4}>
+							<InputLabel id="selecBirthMonth">
+								Month of birth
+							</InputLabel>
+							<Select
+								labelId="selectBirthMonth"
+								name="birthMonth"
+								value={"March"}
+								fullWidth
+							>
+								{months().map((month) => (
+									<MenuItem value={month} key={month}>
+										{month}
+									</MenuItem>
+								))}
+							</Select>
+						</Grid>
+						<Grid item xs={4}>
+							<InputLabel id="selecBirthDay">
+								Day of birth
+							</InputLabel>
+							<Select
+								labelId="selectBirthDay"
+								name="birthDay"
+								value={1}
+								fullWidth
+							>
+								{days().map((day) => (
+									<MenuItem value={day} key={day}>
+										{day}
+									</MenuItem>
+								))}
+							</Select>
+						</Grid>
+						<Grid item xs={12}>
 							<TextField
 								label="E-mail address"
 								name="email"
@@ -76,24 +159,6 @@ function Registration({ onSubmit }) {
 										? "A valid e-mail address is required"
 										: null
 								}
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								label="Date of birth yyyy-mm-dd"
-								name="dateOfBirth"
-								inputRef={register}
-								fullWidth
-								type="date"
-								error={
-									validationErrors.dateOfBirth ? true : false
-								}
-								helperText={
-									validationErrors.dateOfBirth
-										? "Date should be in the format yyyy-mm-dd and not be later than today"
-										: null
-								}
-								InputLabelProps={{ shrink: true }}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -110,6 +175,7 @@ function Registration({ onSubmit }) {
 								}
 							/>
 						</Grid>
+
 						<Grid item xs={12}>
 							<TextField
 								label="Password"
