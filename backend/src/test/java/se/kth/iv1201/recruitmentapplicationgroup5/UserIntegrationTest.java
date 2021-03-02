@@ -83,5 +83,20 @@ class UserIntegrationTest {
 				.andExpect(jsonPath("$.msg").isString())
 				.andExpect(jsonPath("$.url").isString());
 	}
+	
+	@Test
+	public void rejectsFutureDateOfBirth() throws Exception {
+		var invalidName = "\"name\": {\"first\": \"Richard\", \"last\": \"Wallin\"}";
+		var username = "\"username\":\"rillmeister\"";
+		var password = "\"password\":\"password\"";
+		var invalidEmail = "\"email\":\"asd@hej.se\"";
+		var dateOfBirth = "\"dateOfBirth\": {\"year\": 2100, \"month\": 5, \"day\": 11}";
+		mockMvc.perform(post("/api/v1/accounts")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{" + invalidName + ", " + username + ", " + password + ", " + invalidEmail + ", " + dateOfBirth + "}"))
+				.andExpect(status().isInternalServerError()) // Change here when date bug is fixed!
+				.andExpect(jsonPath("$.msg").isString())
+				.andExpect(jsonPath("$.url").isString());
+	}
 
 }
