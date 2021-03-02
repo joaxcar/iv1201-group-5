@@ -20,8 +20,8 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.FullName;
 @Value
 @NoArgsConstructor(force = true)
 public class FullNameDTO {
-	@NotEmpty
+	@NotEmpty(message = "Field first in field name must be atleast one letter")
 	String first;
-	@NotEmpty
+	@NotEmpty(message = "Field last in field name must be atleast one letter")
 	String last;
 }
