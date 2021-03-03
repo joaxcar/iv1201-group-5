@@ -21,14 +21,14 @@ const validationSchema = yup
 		lastName: yup.string().required(),
 		email: yup.string().email().required(),
 		birthYear: yup.number().positive().required(),
-		birthMonth: yup.number().required(),
+		birthMonth: yup.number().positive().max(12).required(),
 		birthDay: yup.number().positive().max(31).required(),
 		username: yup.string().required(),
 		password: yup.string().required().min(8),
 	})
 	.test(
 		"date",
-		"Date must be existing and past",
+		"Date exist and be past",
 		function ({ birthYear, birthMonth, birthDay }) {
 			return (
 				calendar.isExistingDate(birthYear, birthMonth, birthDay) &&
@@ -36,6 +36,14 @@ const validationSchema = yup
 			);
 		}
 	);
+
+function makeMenuItem(value) {
+	return (
+		<MenuItem value={value} key={value}>
+			{value}
+		</MenuItem>
+	);
+}
 
 /**
  * Form for registrating new users.
@@ -94,16 +102,12 @@ function Registration({ onSubmit }) {
 							<Controller
 								as={
 									<Select labelId="selectBirthYear" fullWidth>
-										{calendar.getYears().map((year) => (
-											<MenuItem value={year} key={year}>
-												{year}
-											</MenuItem>
-										))}
+										{calendar.getYears().map(makeMenuItem)}
 									</Select>
 								}
 								name="birthYear"
 								control={control}
-								defaultValue={2004}
+								defaultValue={2020}
 							/>
 						</Grid>
 						<Grid item xs={4}>
@@ -116,11 +120,7 @@ function Registration({ onSubmit }) {
 										labelId="selectBirthMonth"
 										fullWidth
 									>
-										{calendar.getMonths().map((month) => (
-											<MenuItem value={month} key={month}>
-												{month}
-											</MenuItem>
-										))}
+										{calendar.getMonths().map(makeMenuItem)}
 									</Select>
 								}
 								name="birthMonth"
@@ -146,11 +146,7 @@ function Registration({ onSubmit }) {
 												: null
 										}
 									>
-										{calendar.getDays().map((day) => (
-											<MenuItem value={day} key={day}>
-												{day}
-											</MenuItem>
-										))}
+										{calendar.getDays().map(makeMenuItem)}
 									</TextField>
 								}
 								control={control}
