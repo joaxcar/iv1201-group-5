@@ -12,6 +12,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import * as calendar from "../../util/calendar";
+import { helperTexts } from "../../properties/registration";
 import classes from "./registration.module.css";
 
 const validationSchema = yup
@@ -28,7 +29,7 @@ const validationSchema = yup
 	})
 	.test(
 		"date",
-		"Date exist and be past",
+		helperTexts.DATE_FIELD,
 		function ({ birthYear, birthMonth, birthDay }) {
 			return (
 				calendar.isExistingDate(birthYear, birthMonth, birthDay) &&
@@ -76,7 +77,7 @@ function Registration({ onSubmit }) {
 								}
 								helperText={
 									validationErrors.firstName
-										? "First name is required"
+										? helperTexts.FIRST_NAME_FIELD
 										: null
 								}
 							/>
@@ -90,7 +91,7 @@ function Registration({ onSubmit }) {
 								error={validationErrors.lastName ? true : false}
 								helperText={
 									validationErrors.lastName
-										? "Last name is required"
+										? helperTexts.LAST_NAME_FIELD
 										: null
 								}
 							/>
@@ -142,7 +143,7 @@ function Registration({ onSubmit }) {
 										}
 										helperText={
 											validationErrors.date
-												? "Date must exist and be past"
+												? helperTexts.DATE_FIELD
 												: null
 										}
 									>
@@ -163,7 +164,7 @@ function Registration({ onSubmit }) {
 								error={validationErrors.email ? true : false}
 								helperText={
 									validationErrors.email
-										? "A valid e-mail address is required"
+										? helperTexts.EMAIL_FIELD
 										: null
 								}
 							/>
@@ -177,7 +178,7 @@ function Registration({ onSubmit }) {
 								error={validationErrors.username ? true : false}
 								helperText={
 									validationErrors.username
-										? "Username is required"
+										? helperTexts.USERNAME_FIELD
 										: null
 								}
 							/>
@@ -193,7 +194,7 @@ function Registration({ onSubmit }) {
 								error={validationErrors.password ? true : false}
 								helperText={
 									validationErrors.password
-										? "Password is required and should be at least 8 characters"
+										? helperTexts.PASSWORD_FIELD
 										: null
 								}
 							/>
