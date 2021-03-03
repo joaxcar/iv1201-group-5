@@ -1,5 +1,5 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
-
+import Layout from "./components/Layout/Layout";
 import RegistrationContainer from "./containers/RegistrationContainer/RegistrationContainer";
 
 /**
@@ -9,7 +9,9 @@ function App() {
 	return (
 		<>
 			<CssBaseline />
-			<RegistrationContainer />
+			<Layout>
+				<RegistrationContainer />
+			</Layout>
 		</>
 	);
 }
