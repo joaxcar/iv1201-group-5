@@ -1,3 +1,7 @@
+/**
+ * Helper texts meant to guide the user to fill out
+ * forms on the application.
+ */
 const helperTexts = {
 	FIRST_NAME_FIELD: "First name is required",
 	LAST_NAME_FIELD: "Last name is required",
