@@ -26,7 +26,7 @@ const validationSchema = yup
 		username: yup.string().required(),
 		password: yup.string().required().min(8),
 	})
-	.test("date", "Date must be from the past and be valid", function (value) {
+	.test("date", "Date must be existing", function (value) {
 		return isExists(value.birthYear, value.birthMonth - 1, value.birthDay);
 	});
 
@@ -59,7 +59,6 @@ function Registration({ onSubmit }) {
 	} = useForm({
 		resolver: yupResolver(validationSchema),
 	});
-	console.log(validationErrors);
 
 	return (
 		<Container>
@@ -152,7 +151,7 @@ function Registration({ onSubmit }) {
 										}
 										helperText={
 											validationErrors.date
-												? "Date must be valid"
+												? "The given date does not exist"
 												: null
 										}
 									>
