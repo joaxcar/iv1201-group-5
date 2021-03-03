@@ -66,6 +66,12 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>org.sonarsource.scanner.maven</groupId>
+    		<artifactId>sonar-maven-plugin</artifactId>
+    		<version>3.8.0.2131</version>
+		</dependency>
+		
+		<dependency>
     		<groupId>io.sentry</groupId>
     		<artifactId>sentry-spring-boot-starter</artifactId>
     		<version>4.0.0</version>
@@ -84,6 +90,26 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.6</version>
+				<executions>
+            <execution>
+                <goals>
+                    <goal>prepare-agent</goal>
+                </goals>
+            </execution>
+            <!-- attached to Maven test phase -->
+            <execution>
+                <id>report</id>
+                <phase>test</phase>
+                <goals>
+                    <goal>report</goal>
+                </goals>
+            </execution>
+        </executions>
 			</plugin>
 		</plugins>
 	</build>
