@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.integration.AccountRepository;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
@@ -29,6 +31,8 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
  * {@link se.kth.iv1201.recruitmentapplicationgroup5.model.Account}.
  */
 @Service
+
+@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
 public class AccountService implements UserDetailsService{
 
 	ModelMapper modelMapper = new ModelMapper();
