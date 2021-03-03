@@ -11,7 +11,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import * as dayjs from "dayjs";
+import isExists from "date-fns/isExists";
 import classes from "./registration.module.css";
 
 const validationSchema = yup
@@ -27,9 +27,7 @@ const validationSchema = yup
 		password: yup.string().required().min(8),
 	})
 	.test("date", "Date must be from the past and be valid", function (value) {
-		return dayjs(
-			`${value.birthYear}-${value.birthMonth}-${value.birthDay}`
-		).isValid();
+		return isExists(value.birthYear, value.birthMonth - 1, value.birthDay);
 	});
 
 function createYearData() {
@@ -39,23 +37,6 @@ function createYearData() {
 	const earliestBirthYear = lastBirthYearToApply - retirementAge;
 	return [...Array(65).keys()].map((index) => index + earliestBirthYear);
 }
-
-// function months() {
-// 	return [
-// 		"January",
-// 		"February",
-// 		"March",
-// 		"April",
-// 		"May",
-// 		"June",
-// 		"July",
-// 		"August",
-// 		"September",
-// 		"October",
-// 		"November",
-// 		"December",
-// 	];
-// }
 
 function months() {
 	return [...Array(12).keys()].map((index) => index + 1);
@@ -167,13 +148,11 @@ function Registration({ onSubmit }) {
 										select
 										fullWidth
 										error={
-											validationErrors.lastName
-												? true
-												: false
+											validationErrors.date ? true : false
 										}
 										helperText={
-											validationErrors.lastName
-												? "Date must be past and valid"
+											validationErrors.date
+												? "Date must be valid"
 												: null
 										}
 									>
