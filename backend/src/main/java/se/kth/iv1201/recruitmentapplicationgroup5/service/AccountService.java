@@ -11,6 +11,8 @@ import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.integration.AccountRepository;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
@@ -25,6 +27,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
  * {@link se.kth.iv1201.recruitmentapplicationgroup5.model.Account}.
  */
 @Service
+@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
 public class AccountService {
 
 	ModelMapper modelMapper = new ModelMapper();
