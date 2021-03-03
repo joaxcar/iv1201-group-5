@@ -11,7 +11,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import isExists from "date-fns/isExists";
+import * as calendar from "../../util/calendar";
 import classes from "./registration.module.css";
 
 const validationSchema = yup
@@ -26,25 +26,16 @@ const validationSchema = yup
 		username: yup.string().required(),
 		password: yup.string().required().min(8),
 	})
-	.test("date", "Date must be existing", function (value) {
-		return isExists(value.birthYear, value.birthMonth - 1, value.birthDay);
-	});
-
-function createYearData() {
-	const minimumAgeToApply = 16;
-	const retirementAge = 65;
-	const lastBirthYearToApply = new Date().getFullYear() - minimumAgeToApply;
-	const earliestBirthYear = lastBirthYearToApply - retirementAge;
-	return [...Array(65).keys()].map((index) => index + earliestBirthYear);
-}
-
-function months() {
-	return [...Array(12).keys()].map((index) => index + 1);
-}
-
-function days() {
-	return [...Array(31).keys()].map((index) => index + 1);
-}
+	.test(
+		"date",
+		"Date must be existing and past",
+		function ({ birthYear, birthMonth, birthDay }) {
+			return (
+				calendar.isExistingDate(birthYear, birthMonth, birthDay) &&
+				calendar.isPastDate(birthYear, birthMonth, birthDay)
+			);
+		}
+	);
 
 /**
  * Form for registrating new users.
@@ -103,7 +94,7 @@ function Registration({ onSubmit }) {
 							<Controller
 								as={
 									<Select labelId="selectBirthYear" fullWidth>
-										{createYearData().map((year) => (
+										{calendar.getYears().map((year) => (
 											<MenuItem value={year} key={year}>
 												{year}
 											</MenuItem>
@@ -125,7 +116,7 @@ function Registration({ onSubmit }) {
 										labelId="selectBirthMonth"
 										fullWidth
 									>
-										{months().map((month) => (
+										{calendar.getMonths().map((month) => (
 											<MenuItem value={month} key={month}>
 												{month}
 											</MenuItem>
@@ -151,11 +142,11 @@ function Registration({ onSubmit }) {
 										}
 										helperText={
 											validationErrors.date
-												? "The given date does not exist"
+												? "Date must exist and be past"
 												: null
 										}
 									>
-										{days().map((day) => (
+										{calendar.getDays().map((day) => (
 											<MenuItem value={day} key={day}>
 												{day}
 											</MenuItem>
