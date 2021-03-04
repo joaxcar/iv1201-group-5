@@ -7,22 +7,9 @@ services:
         ports:
             - 5431:5432
         environment:
-            POSTGRES_USER: user
+            POSTGRES_USER: admin
             POSTGRES_PASSWORD: password
             POSTGRES_DB: old_data
         container_name: old_postgres
-        volumes:
-          - /tmp:/tmp
-    new_postgres:
-        build: ./database/new
-        image: new_postgres
-        restart: always
-        ports:
-            - 5432:5432
-        environment:
-            POSTGRES_USER: user
-            POSTGRES_PASSWORD: password
-            POSTGRES_DB: new_data
-        container_name: new_postgres
         volumes:
           - /tmp:/tmp
