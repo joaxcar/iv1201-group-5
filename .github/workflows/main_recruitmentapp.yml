@@ -17,13 +17,18 @@ jobs:
     runs-on: 'ubuntu-latest'
 
     steps:
-    - uses: actions/checkout@master
-    
+    - uses: actions/checkout@v2
+
     - name: Set up JDK 15
       uses: actions/setup-java@v1
       with:
         java-version: 15
-    
+
+    - name: Use Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
     - name: Cache Maven packages
       uses: actions/cache@v2
       with:
@@ -38,6 +43,11 @@ jobs:
         password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD }}
 
     - run: |
+        cd ../frontend
+        npm ci
+        npm run build --if-present
+        cd ../backend
+        ls -la src/main/resources/public/
         mvn -B package
         docker build . -t iv1201project.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}/regapp:${{ github.sha }}
         docker push iv1201project.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME }}/regapp:${{ github.sha }}
