@@ -12,6 +12,8 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.FullName;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Person;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO;
+import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.FullNameDTO;
+import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.PersonDTO;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
 
 /**
@@ -24,23 +26,8 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
 @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
 public class AccountService {
 
-//	ModelMapper modelMapper = new ModelMapper();
-
 	@Autowired
 	AccountRepository repository;
-
-	/**
-	 * Basic constructor.
-	 * 
-	 * This constructor will configures {@link ModelMapper} to be able to work with
-	 * Lombok value objects.
-	 */
-//	public AccountService() {
-//		modelMapper.getConfiguration().setFieldMatchingEnabled(true)
-//				.setFieldAccessLevel(Configuration.AccessLevel.PRIVATE).setMatchingStrategy(MatchingStrategies.LOOSE);
-//		modelMapper.createTypeMap(String.class, LocalDate.class);
-//		modelMapper.addConverter(stringToDate);
-//	}
 
 	/**
 	 * Add a new account.
@@ -55,14 +42,6 @@ public class AccountService {
 		AccountDTO newAccountDTO = accountToDTO(newAccount);
 		return newAccountDTO;
 	}
-
-	// Custom converter to get a localdate out of a string with modelmapper
-//	private Converter<DateOfBirthDTO, LocalDate> stringToDate = new AbstractConverter<DateOfBirthDTO, LocalDate>() {
-//		@Override
-//		protected LocalDate convert(DateOfBirthDTO date) {
-//			return LocalDate.of(date.getYear(), date.getMonth(), date.getDay());
-//		}
-//	};
 
 	private Account registrationToAccount(final RegistrationDetails details) {
 		FullName fullName = new FullName();
@@ -83,9 +62,20 @@ public class AccountService {
 	}
 
 	private AccountDTO accountToDTO(final Account account) {
-		//final AccountDTO accountDTO = modelMapper.map(account, AccountDTO.class);
-		//return accountDTO;
-		return new AccountDTO();
+		var firstName = account.getPerson().getName().getFirstName();
+		var lastName = account.getPerson().getName().getLastName();
+		FullNameDTO fullName = new FullNameDTO(firstName, lastName);
+		
+		var personId = account.getPerson().getId();
+		var birthDate = account.getPerson().getBirthDate();
+		var email = account.getPerson().getEmail();
+		PersonDTO person = new PersonDTO(personId, fullName, birthDate, email);
+		
+		var accountId = account.getId();
+		var username = account.getUsername();
+		var password = account.getPassword();
+		
+		return new AccountDTO(accountId, person, username, password);
 	}
 
 }

@@ -14,6 +14,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
+/**
+ * Registration details for applicant.
+ *
+ */
 @Data
 public class RegistrationDetails {
 	@NotNull(message = "Must have field: name")
