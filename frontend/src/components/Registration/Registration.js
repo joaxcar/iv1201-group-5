@@ -4,27 +4,59 @@ import {
 	Grid,
 	Typography,
 	Button,
+	Select,
+	InputLabel,
+	MenuItem,
 } from "@material-ui/core";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import * as calendar from "../../util/calendar";
+import { helperTexts } from "../../properties/registration";
 import classes from "./registration.module.css";
 
-const validationSchema = yup.object().shape({
-	firstName: yup.string().required(),
-	lastName: yup.string().required(),
-	email: yup.string().email().required(),
-	dateOfBirth: yup.date().max(new Date()).required(),
-	username: yup.string().required(),
-	password: yup.string().required().min(8),
-});
+const validationSchema = yup
+	.object()
+	.shape({
+		firstName: yup.string().required(),
+		lastName: yup.string().required(),
+		email: yup.string().email().required(),
+		birthYear: yup.number().positive().required(),
+		birthMonth: yup.number().positive().max(12).required(),
+		birthDay: yup.number().positive().max(31).required(),
+		username: yup.string().required(),
+		password: yup.string().required().min(8),
+	})
+	.test(
+		"date",
+		helperTexts.DATE_FIELD,
+		function ({ birthYear, birthMonth, birthDay }) {
+			return (
+				calendar.isExistingDate(birthYear, birthMonth, birthDay) &&
+				calendar.isPastDate(birthYear, birthMonth, birthDay)
+			);
+		}
+	);
+
+function makeMenuItem(value) {
+	return (
+		<MenuItem value={value} key={value}>
+			{value}
+		</MenuItem>
+	);
+}
 
 /**
  * Form for registrating new users.
  * @param {function} onSubmit - The callback function to run on submit
  */
 function Registration({ onSubmit }) {
-	const { register, handleSubmit, errors: validationErrors } = useForm({
+	const {
+		register,
+		handleSubmit,
+		control,
+		errors: validationErrors,
+	} = useForm({
 		resolver: yupResolver(validationSchema),
 	});
 
@@ -45,7 +77,7 @@ function Registration({ onSubmit }) {
 								}
 								helperText={
 									validationErrors.firstName
-										? "First name is required"
+										? helperTexts.FIRST_NAME_FIELD
 										: null
 								}
 							/>
@@ -59,12 +91,71 @@ function Registration({ onSubmit }) {
 								error={validationErrors.lastName ? true : false}
 								helperText={
 									validationErrors.lastName
-										? "Last name is required"
+										? helperTexts.LAST_NAME_FIELD
 										: null
 								}
 							/>
 						</Grid>
-						<Grid item xs={12} sm={6}>
+						<Grid item xs={4}>
+							<InputLabel id="selecBirthYear">
+								Year of birth
+							</InputLabel>
+							<Controller
+								as={
+									<Select labelId="selectBirthYear" fullWidth>
+										{calendar.getYears().map(makeMenuItem)}
+									</Select>
+								}
+								name="birthYear"
+								control={control}
+								defaultValue={2020}
+							/>
+						</Grid>
+						<Grid item xs={4}>
+							<InputLabel id="selecBirthMonth">
+								Month of birth
+							</InputLabel>
+							<Controller
+								as={
+									<Select
+										labelId="selectBirthMonth"
+										fullWidth
+									>
+										{calendar.getMonths().map(makeMenuItem)}
+									</Select>
+								}
+								name="birthMonth"
+								defaultValue={1}
+								control={control}
+							/>
+						</Grid>
+						<Grid item xs={4}>
+							<InputLabel id="selecBirthDay">
+								Day of birth
+							</InputLabel>
+							<Controller
+								as={
+									<TextField
+										select
+										fullWidth
+										error={
+											validationErrors.date ? true : false
+										}
+										helperText={
+											validationErrors.date
+												? helperTexts.DATE_FIELD
+												: null
+										}
+									>
+										{calendar.getDays().map(makeMenuItem)}
+									</TextField>
+								}
+								control={control}
+								name="birthDay"
+								defaultValue={1}
+							/>
+						</Grid>
+						<Grid item xs={12}>
 							<TextField
 								label="E-mail address"
 								name="email"
@@ -73,27 +164,9 @@ function Registration({ onSubmit }) {
 								error={validationErrors.email ? true : false}
 								helperText={
 									validationErrors.email
-										? "A valid e-mail address is required"
+										? helperTexts.EMAIL_FIELD
 										: null
 								}
-							/>
-						</Grid>
-						<Grid item xs={12} sm={6}>
-							<TextField
-								label="Date of birth yyyy-mm-dd"
-								name="dateOfBirth"
-								inputRef={register}
-								fullWidth
-								type="date"
-								error={
-									validationErrors.dateOfBirth ? true : false
-								}
-								helperText={
-									validationErrors.dateOfBirth
-										? "Date should be in the format yyyy-mm-dd and not be later than today"
-										: null
-								}
-								InputLabelProps={{ shrink: true }}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -105,11 +178,12 @@ function Registration({ onSubmit }) {
 								error={validationErrors.username ? true : false}
 								helperText={
 									validationErrors.username
-										? "Username is required"
+										? helperTexts.USERNAME_FIELD
 										: null
 								}
 							/>
 						</Grid>
+
 						<Grid item xs={12}>
 							<TextField
 								label="Password"
@@ -120,7 +194,7 @@ function Registration({ onSubmit }) {
 								error={validationErrors.password ? true : false}
 								helperText={
 									validationErrors.password
-										? "Password is required and should be at least 8 characters"
+										? helperTexts.PASSWORD_FIELD
 										: null
 								}
 							/>

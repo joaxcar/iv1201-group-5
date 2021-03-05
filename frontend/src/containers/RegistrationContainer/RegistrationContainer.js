@@ -6,7 +6,6 @@ import alertTypes from "../../properties/alerttypes";
 import Alert from "../../components/Alert/Alert";
 
 function formatDetails(registrationDetails) {
-	const MONTH_ADJUSTER = 1;
 	return {
 		name: {
 			first: registrationDetails.firstName,
@@ -14,9 +13,9 @@ function formatDetails(registrationDetails) {
 		},
 		email: registrationDetails.email,
 		dateOfBirth: {
-			year: registrationDetails.dateOfBirth.getFullYear(),
-			month: registrationDetails.dateOfBirth.getMonth() + MONTH_ADJUSTER,
-			day: registrationDetails.dateOfBirth.getDate(),
+			year: registrationDetails.birthYear,
+			month: registrationDetails.birthMonth,
+			day: registrationDetails.birthDay,
 		},
 		username: registrationDetails.username,
 		password: registrationDetails.password,
