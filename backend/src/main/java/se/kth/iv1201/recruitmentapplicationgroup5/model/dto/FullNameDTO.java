@@ -14,9 +14,8 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.FullName;
 /**
  * DTO class for {@link FullName}.
  * 
- * @author Johan Carlsson
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Value
 @NoArgsConstructor(force = true)
 public class FullNameDTO {

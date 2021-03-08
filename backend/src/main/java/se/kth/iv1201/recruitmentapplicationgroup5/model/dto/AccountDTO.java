@@ -12,9 +12,8 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
 /**
  * DTO class for {@link Account}.
  * 
- * @author Johan Carlsson
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Value
 @NoArgsConstructor(force = true)
 @EqualsAndHashCode(callSuper = false)

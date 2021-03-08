@@ -41,7 +41,7 @@ class UserIntegrationTest {
 		var username = "\"username\":\"rillmeister\"";
 		var password = "\"password\":\"password\"";
 		var email = "\"email\":\"asd@hej.se\"";
-		var dateOfBirth = "\"dateOfBirth\": {\"year\": 1900, \"month\": 5, \"day\": 11}";
+		var dateOfBirth = "\"dateOfBirth\": \"1900-05-11\"";
 		
 		mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -61,7 +61,7 @@ class UserIntegrationTest {
 		var username = "\"username\":\"rillmeister\"";
 		var password = "\"password\":\"password\"";
 		var email = "\"email\":\"asd@hej.se\"";
-		var dateOfBirth = "\"dateOfBirth\": {\"year\": 1900, \"month\": 5, \"day\": 11}";
+		var dateOfBirth = "\"dateOfBirth\": \"1900-05-11\"";
 		mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{" + invalidName + ", " + username + ", " + password + ", " + email + ", " + dateOfBirth + "}"))
@@ -76,7 +76,7 @@ class UserIntegrationTest {
 		var username = "\"username\":\"rillmeister\"";
 		var password = "\"password\":\"password\"";
 		var invalidEmail = "\"email\":\"asdhej.se\"";
-		var dateOfBirth = "\"dateOfBirth\": {\"year\": 1900, \"month\": 5, \"day\": 11}";
+		var dateOfBirth = "\"dateOfBirth\": \"1900-05-11\"";
 		mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{" + invalidName + ", " + username + ", " + password + ", " + invalidEmail + ", " + dateOfBirth + "}"))
@@ -91,11 +91,11 @@ class UserIntegrationTest {
 		var username = "\"username\":\"rillmeister\"";
 		var password = "\"password\":\"password\"";
 		var invalidEmail = "\"email\":\"asd@hej.se\"";
-		var dateOfBirth = "\"dateOfBirth\": {\"year\": 2100, \"month\": 5, \"day\": 11}";
+		var dateOfBirth = "\"dateOfBirth\": \"2100-05-11\"";
 		mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{" + invalidName + ", " + username + ", " + password + ", " + invalidEmail + ", " + dateOfBirth + "}"))
-				.andExpect(status().isInternalServerError()) // Change here when date bug is fixed!
+				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.msg").isString())
 				.andExpect(jsonPath("$.url").isString());
 	}
