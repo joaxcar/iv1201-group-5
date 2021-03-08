@@ -8,7 +8,7 @@ import javax.persistence.Converter;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Authority;
 
 /**
- * Class converting our enum Authority to string for persistence. used automagically by Spring.
+ * Class converting our enum Authority to string for persistence. Used automagically by Spring.
  */
 @Converter(autoApply = true)
 public class AuthorityConverter implements AttributeConverter<Authority, String> {
