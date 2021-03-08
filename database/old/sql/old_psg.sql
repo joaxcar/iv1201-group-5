@@ -1,3 +1,9 @@
+/*
+* SQL script for testing. Use this script to generate the old data
+* and migrate it to the new shema.
+*
+* Use this script with PostgreSQL
+*/
 IF (SCHEMA_ID('old_data') IS NULL) 
 BEGIN
 EXEC('CREATE SCHEMA old_data;')
@@ -47,7 +53,7 @@ INSERT INTO old_data.role (role_id, name) VALUES (2, 'applicant');
 
 INSERT INTO old_data.person (person_id, name, surname, username, password, role_id)
 VALUES (1, 'Greta', 'Borg', 'borg', 'wl9nk23a', 1);
-
+4 950 00
 INSERT INTO old_data.person (person_id, name, surname, ssn, email, role_id)
 VALUES (2, 'Per', 'Strand', '19671212-1211', 'per@strand.kth.se', 2);
 
@@ -62,7 +68,7 @@ VALUES (1, 'Korvgrillning');
 
 INSERT INTO old_data.competence (competence_id, name)
 VALUES (2, 'Karuselldrift');
-
+4 950 00
 INSERT INTO old_data.competence_profile (competence_profile_id, person_id,
 competence_id, years_of_experience)
 VALUES (1, 2, 1, 3.5);

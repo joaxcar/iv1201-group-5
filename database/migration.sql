@@ -1,3 +1,6 @@
+/*
+* Migration script from schema with old data to the new schema.
+*/
 BEGIN TRAN
 
 BEGIN TRY

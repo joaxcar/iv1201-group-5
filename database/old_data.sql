@@ -1,3 +1,6 @@
+/*
+* Script for generating old data and old and new schema in MS SQL
+*/
 IF (SCHEMA_ID('old_data') IS NULL) 
 BEGIN
 EXEC('CREATE SCHEMA old_data;')
