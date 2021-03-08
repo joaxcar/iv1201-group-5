@@ -11,9 +11,8 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.Person;
 /**
  * DTO class for {@link Person}.
  * 
- * @author Johan Carlsson
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Value
 @NoArgsConstructor(force = true)
 public class PersonDTO {

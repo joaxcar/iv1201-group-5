@@ -5,20 +5,30 @@ import { postToAPI } from "../../util/network";
 import alertTypes from "../../properties/alerttypes";
 import Alert from "../../components/Alert/Alert";
 
-function formatDetails(registrationDetails) {
+function formatDetails({
+	firstName,
+	lastName,
+	email,
+	birthYear,
+	birthMonth,
+	birthDay,
+	username,
+	password,
+}) {
+	const dateOfBirth = `${birthYear}-${String(birthMonth).padStart(
+		2,
+		"0"
+	)}-${String(birthDay).padStart(2, "0")}`;
+
 	return {
 		name: {
-			first: registrationDetails.firstName,
-			last: registrationDetails.lastName,
+			first: firstName,
+			last: lastName,
 		},
-		email: registrationDetails.email,
-		dateOfBirth: {
-			year: registrationDetails.birthYear,
-			month: registrationDetails.birthMonth,
-			day: registrationDetails.birthDay,
-		},
-		username: registrationDetails.username,
-		password: registrationDetails.password,
+		email: email,
+		dateOfBirth,
+		username: username,
+		password: password,
 	};
 }
 
