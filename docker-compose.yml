@@ -1,0 +1,15 @@
+version: '3'
+services:
+    old_postgres:
+        build: ./database/old
+        image: old_postgres
+        restart: always
+        ports:
+            - 5431:5432
+        environment:
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: old_data
+        container_name: old_postgres
+        volumes:
+          - /tmp:/tmp
