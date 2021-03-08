@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.FullNameDTO;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
 
 @SpringBootTest
+@TestPropertySource(locations = "/integration-test.properties")
 class AccountServiceTest {
 	
 	@Autowired
