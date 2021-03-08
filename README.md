@@ -9,7 +9,7 @@
 * [Contact](#contact)
 
 ## General info
-Add more general information about project. What the purpose of the project is? Motivation?
+This is "The Amusements Parks" recruitment application. The goal is to build a maintainable and scalable application that can replace the old and outdated "Recruitment one".
 
 
 ## Technologies
@@ -17,13 +17,20 @@ Add more general information about project. What the purpose of the project is? 
 * Azure Cloud App for Docker
 * Azure SQL
 
-### Backend
-* Java
-* Spring Boot
+The application runs in Azure cloud with an Azure SQL database. The application is automaticly redeployed when a new docker image is uploaded to our Azure Image Reposetpry.
 
-### Frontend
-* JavaScript
-* React
+
+### Backend
+* Java - 15
+* Spring Boot - 2.3.0
+
+The backend is a REST API created with Spring Boot and written in JAVA. The backend can be built and deployed as a stand alone web service. In production we deploy it contanerized with a built in client.
+
+### Frontend (Client)
+* ECMAScript - 16
+* React - 17
+
+The client is a component based SPA written in REACT and ECMAScript.
 
 ## Setup
 ### Clone project
@@ -46,14 +53,12 @@ sudo docker run -p 8080:8080 regapp:latest
 ```
 
 ## Features
-List of features ready and TODOs for future development
-* Awesome feature 1
-* Awesome feature 2
-* Awesome feature 3
+Done:
+* Sign up as a user
 
 To-do list:
-* Wow improvement to be done 1
-* Wow improvement to be done 2
+* Apply for jobs
+* Handle applications as an administrator
 
 ## Status
 Project is: _in progress_
