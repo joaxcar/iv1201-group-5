@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -15,6 +16,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.Authority;
 /*
  * Class for constructing and parsing JWT:s for use in spring security
  */
+@Service
 public class JwtUtil {
 	private int TEN_HOURS_IN_MILLISECONDS = 36000000;
 	private String SECRET_KEY = Base64.getEncoder().encodeToString("CHANGE_THIS_IN_PRODUCTION".getBytes());
