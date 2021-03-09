@@ -28,7 +28,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
  */
 @Service
 @Validated
-@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+@Transactional(rollbackFor = Exception.class)
 public class AccountService {
 
 	@Autowired
