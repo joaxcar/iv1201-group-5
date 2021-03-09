@@ -4,6 +4,10 @@ import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
 
+/**
+ * Class mapping requests to Authenticate controller.
+ *
+ */
 @Data
 public class AuthenticationRequest {
 	

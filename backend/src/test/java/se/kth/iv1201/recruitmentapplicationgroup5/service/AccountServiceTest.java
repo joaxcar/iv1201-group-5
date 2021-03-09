@@ -29,11 +29,27 @@ class AccountServiceTest {
 	}
 	
 	@Test
-	public void shouldReturnInstanceOfAccountDTO() {
+	public void shouldReturnInstanceOfAccountDTOByCreate() {
 		RegistrationDetails details = getValidRegistrationDetails();
 
 		Object result = accountService.addAccount(details);
 		Assertions.assertTrue(result instanceof AccountDTO); 
+	}
+	
+	@Test
+	public void shouldReturnInstanceOfAccountDTOByGetIfExists() throws AccountNotFoundException {
+		RegistrationDetails details = getValidRegistrationDetails();
+
+		AccountDTO test = accountService.addAccount(details);
+		Object result = accountService.getAccount(test.getId());
+		Assertions.assertTrue(result instanceof AccountDTO); 
+	}
+
+	@Test
+	public void shouldThrowExceptionByGetIfNotExists() {
+		Assertions.assertThrows(AccountNotFoundException.class, () -> {
+			accountService.getAccount(1234);
+		});
 	}
 	
 	@Test

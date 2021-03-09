@@ -1,6 +1,7 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -10,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
@@ -32,7 +32,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
  */
 @Service
 @Validated
-@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+@Transactional(rollbackFor = Exception.class)
 public class AccountService implements UserDetailsService{
 
 	@Autowired
@@ -66,6 +66,25 @@ public class AccountService implements UserDetailsService{
 		List<Account> account = repository.findByUsername(username);
 		return account.stream().map(acc -> this.accountToDTO(acc)).collect(Collectors.toList());
 	}
+	
+	/**
+	 * Get account by id.
+	 * 
+	 * Returns a {@link se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO}
+	 * matching id given as parameter.
+	 *
+	 * @param id - account id
+	 * @return - matching account as DTOs
+	 * @throws AccountNotFoundException - if no Account exists with given id
+	 */
+	public AccountDTO getAccount(int id) throws AccountNotFoundException {
+		Optional<Account> account = repository.findById(id);
+		if (account.isPresent()) {
+			return accountToDTO(account.get());
+		} else {
+			throw new AccountNotFoundException("No account with id: " + id);
+		}
+	}
 
 	private Account registrationToAccount(final RegistrationDetails details) {
 		FullName fullName = new FullName();
@@ -81,6 +100,7 @@ public class AccountService implements UserDetailsService{
 		account.setPerson(person);
 		account.setUsername(details.getUsername());
 		account.setPassword(details.getPassword());
+		account.setAuthority(Authority.APPLICANT);
 		
 		return account;
 	}
@@ -114,15 +134,12 @@ public class AccountService implements UserDetailsService{
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		/* Riktiga funktionen sen
-		var user = repository.findByUsername(username);
-		if(user == null) {
-			throw new UsernameNotFoundException("Invalid user credentials.");
-		}
-		return user;
-		*/
-		
-		return createMockUser();
+
+		return repository.findByUsername(username).stream()
+				.findFirst()
+				.orElseThrow(() -> new UsernameNotFoundException("Invalid user credentials."));
+
+		//return createMockUser();
 	}
 	
 	//TODO: Ta bort denna när man kör på riktigt
