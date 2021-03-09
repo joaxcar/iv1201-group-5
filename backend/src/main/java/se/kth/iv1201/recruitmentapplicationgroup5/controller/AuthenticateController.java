@@ -41,11 +41,11 @@ public class AuthenticateController {
 		manager.authenticate(new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
 		final UserDetails user = service.loadUserByUsername(req.getUsername());
 		final String jwt = jwtUtil.generateToken(user);
-		final Cookie jwtCookie = new Cookie("Authentication-Bearer", jwt);
+		final Cookie jwtCookie = new Cookie("Authorization", jwt);
 		jwtCookie.setMaxAge(TEN_HOURS_IN_SECONDS);
 		jwtCookie.setHttpOnly(true);
 		res.addCookie(jwtCookie);
-		return new ResponseEntity<String>("Successful login", HttpStatus.OK);                           //.header("Set-Cookie", "Authentication-Bearer=" + jwt).build();
+		return new ResponseEntity<String>("Successful login", HttpStatus.OK); 
 	}
 	
 

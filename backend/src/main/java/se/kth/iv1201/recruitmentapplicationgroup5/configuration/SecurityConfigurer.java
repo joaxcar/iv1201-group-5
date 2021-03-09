@@ -11,7 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import se.kth.iv1201.recruitmentapplicationgroup5.filter.JwtAuthFilter;
 import se.kth.iv1201.recruitmentapplicationgroup5.service.AccountService;
 
 /**
@@ -25,6 +27,9 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private AccountService accountService;
 	
+	@Autowired
+	private JwtAuthFilter jwtAuthFilter;
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(accountService);
@@ -34,14 +39,16 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.csrf().disable()
-			.authorizeRequests().antMatchers(HttpMethod.POST, "/api/v1/authenticate").permitAll()
+			.authorizeRequests()
+			.antMatchers(HttpMethod.POST, "/api/v1/authenticate").permitAll()
 			.antMatchers(HttpMethod.POST, "/api/v1/accounts").permitAll()
 			.antMatchers("/api/v1/**").authenticated()
 			.antMatchers("/**").permitAll()
-			.anyRequest().authenticated().and()
+			.anyRequest().authenticated()
+			.and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
-		//http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Override
