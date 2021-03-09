@@ -45,17 +45,23 @@ function RegistrationContainer() {
 
 	function handleFormSubmit(registrationDetails, event) {
 		event.preventDefault();
-		event.target.reset();
-
 		const formattedRegistrationDetails = formatDetails(registrationDetails);
 
 		postToAPI(endpoints.ACCOUNTS, formattedRegistrationDetails)
-			.then((response) =>
+			.then((response) => {
+				console.log(response)
+				event.target.reset();
 				showAlert(alertTypes.SUCCESS, "Registration was successful")
-			)
-			.catch((error) =>
-				showAlert(alertTypes.ERROR, "Something went wrong")
-			);
+			})
+			.catch((error) =>{
+				if(error.message === "Conflict") {
+					document.getElementsByName('username')[0].value = "";
+					showAlert(alertTypes.ERROR, "Existing username")
+				} else {
+					console.log(error)
+					showAlert(alertTypes.ERROR, "Something went wrong")
+				}
+			});
 	}
 
 	return (
