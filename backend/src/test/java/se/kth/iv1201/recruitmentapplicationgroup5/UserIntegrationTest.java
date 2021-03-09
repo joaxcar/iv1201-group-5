@@ -1,7 +1,8 @@
 package se.kth.iv1201.recruitmentapplicationgroup5;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "/integration-test.properties")
@@ -24,10 +27,18 @@ class UserIntegrationTest {
 	private WebApplicationContext webApplicationContext;
 	
 	private MockMvc mockMvc;
+
+	String name = "\"name\": {\"first\": \"Richard\", \"last\": \"Wallin\"}";
+	String username = "\"username\":\"rillmeister\"";
+	String password = "\"password\":\"password\"";
+	String email = "\"email\":\"asd@hej.se\"";
+	String dateOfBirth = "\"dateOfBirth\": \"1900-05-11\"";
 	
 	@BeforeEach
 	public void setup() throws Exception {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+		this.mockMvc = MockMvcBuilders
+				.webAppContextSetup(this.webApplicationContext)
+				.build();
 	}
 	
 	@AfterEach
@@ -37,12 +48,6 @@ class UserIntegrationTest {
 
 	@Test
 	public void returnsUserDetails() throws Exception {
-		var name = "\"name\": {\"first\": \"Richard\", \"last\": \"Wallin\"}";
-		var username = "\"username\":\"rillmeister\"";
-		var password = "\"password\":\"password\"";
-		var email = "\"email\":\"asd@hej.se\"";
-		var dateOfBirth = "\"dateOfBirth\": \"1900-05-11\"";
-		
 		mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{" + name + ", " + username + ", " + password + ", " + email + ", " + dateOfBirth + "}"))
@@ -58,10 +63,6 @@ class UserIntegrationTest {
 	@Test
 	public void rejectsInvalidJson() throws Exception {
 		var invalidName = "\"name\": \"first\": \"Richard\", \"last\": \"Wallin\"}";
-		var username = "\"username\":\"rillmeister\"";
-		var password = "\"password\":\"password\"";
-		var email = "\"email\":\"asd@hej.se\"";
-		var dateOfBirth = "\"dateOfBirth\": \"1900-05-11\"";
 		mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{" + invalidName + ", " + username + ", " + password + ", " + email + ", " + dateOfBirth + "}"))
@@ -72,14 +73,10 @@ class UserIntegrationTest {
 	
 	@Test
 	public void rejectsInvalidEmail() throws Exception {
-		var invalidName = "\"name\": {\"first\": \"Richard\", \"last\": \"Wallin\"}";
-		var username = "\"username\":\"rillmeister\"";
-		var password = "\"password\":\"password\"";
 		var invalidEmail = "\"email\":\"asdhej.se\"";
-		var dateOfBirth = "\"dateOfBirth\": \"1900-05-11\"";
 		mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{" + invalidName + ", " + username + ", " + password + ", " + invalidEmail + ", " + dateOfBirth + "}"))
+				.content("{" + name + ", " + username + ", " + password + ", " + invalidEmail + ", " + dateOfBirth + "}"))
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.msg").isString())
 				.andExpect(jsonPath("$.url").isString());
@@ -87,17 +84,26 @@ class UserIntegrationTest {
 	
 	@Test
 	public void rejectsFutureDateOfBirth() throws Exception {
-		var invalidName = "\"name\": {\"first\": \"Richard\", \"last\": \"Wallin\"}";
-		var username = "\"username\":\"rillmeister\"";
-		var password = "\"password\":\"password\"";
-		var invalidEmail = "\"email\":\"asd@hej.se\"";
-		var dateOfBirth = "\"dateOfBirth\": \"2100-05-11\"";
+		var invalidDateOfBirth = "\"dateOfBirth\": \"2100-05-11\"";
 		mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{" + invalidName + ", " + username + ", " + password + ", " + invalidEmail + ", " + dateOfBirth + "}"))
+				.content("{" + name + ", " + username + ", " + password + ", " + email + ", " + invalidDateOfBirth + "}"))
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.msg").isString())
 				.andExpect(jsonPath("$.url").isString());
+	}
+
+	@Test
+	public void rejectsDuplicateUsers() throws Exception {
+		username = "\"username\":\"duplicate\"";
+		mockMvc.perform(post("/api/v1/accounts")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{" + name + ", " + username + ", " + password + ", " + email + ", " + dateOfBirth + "}"))
+				.andExpect(status().isCreated());
+		mockMvc.perform(post("/api/v1/accounts")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{" + name + ", " + username + ", " + password + ", " + email + ", " + dateOfBirth + "}"))
+				.andExpect(status().isConflict());
 	}
 
 }
