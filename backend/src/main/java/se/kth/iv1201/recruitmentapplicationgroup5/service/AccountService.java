@@ -1,6 +1,7 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -59,6 +60,25 @@ public class AccountService {
 	public List<AccountDTO> findAccount(String username) {
 		List<Account> account = repository.findByUsername(username);
 		return account.stream().map(acc -> this.accountToDTO(acc)).collect(Collectors.toList());
+	}
+	
+	/**
+	 * Get account by id.
+	 * 
+	 * Returns a {@link se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO}
+	 * matching id given as parameter.
+	 *
+	 * @param id - account id
+	 * @return - matching account as DTOs
+	 * @throws AccountNotFoundException - if no Account exists with given id
+	 */
+	public AccountDTO getAccount(int id) throws AccountNotFoundException {
+		Optional<Account> account = repository.findById(id);
+		if (account.isPresent()) {
+			return accountToDTO(account.get());
+		} else {
+			throw new AccountNotFoundException("No account with id: " + id);
+		}
 	}
 
 	private Account registrationToAccount(final RegistrationDetails details) {
