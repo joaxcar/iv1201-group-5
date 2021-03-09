@@ -49,16 +49,14 @@ function RegistrationContainer() {
 
 		postToAPI(endpoints.ACCOUNTS, formattedRegistrationDetails)
 			.then((response) => {
-				console.log(response)
 				event.target.reset();
 				showAlert(alertTypes.SUCCESS, "Registration was successful")
 			})
 			.catch((error) =>{
 				if(error.message === "Conflict") {
 					document.getElementsByName('username')[0].value = "";
-					showAlert(alertTypes.ERROR, "Existing username")
+					showAlert(alertTypes.ERROR, "User already exists")
 				} else {
-					console.log(error)
 					showAlert(alertTypes.ERROR, "Something went wrong")
 				}
 			});
