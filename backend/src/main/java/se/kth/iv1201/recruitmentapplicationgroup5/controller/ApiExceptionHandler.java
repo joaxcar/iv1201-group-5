@@ -52,7 +52,7 @@ public class ApiExceptionHandler {
 		return ResponseEntity.status(status).body(body);
 	}
 	
-	//@ExceptionHandler(value = ConstraintViolationException.class)
+	@ExceptionHandler(value = ConstraintViolationException.class)
 	public ResponseEntity<Object> handleContraintViolationException(
 			ConstraintViolationException e,
 			WebRequest req)
@@ -61,7 +61,7 @@ public class ApiExceptionHandler {
 		return handleInternalError(e, req);
 	}
 	
-	//@ExceptionHandler(value = Exception.class)
+	@ExceptionHandler(value = Exception.class)
 	public ResponseEntity<Object> handleAllExceptions(Exception e, WebRequest req) {
 		log.debug(e.getMessage());
 		return handleInternalError(e, req);

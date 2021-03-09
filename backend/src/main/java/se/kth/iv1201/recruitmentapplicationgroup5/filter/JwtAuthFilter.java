@@ -40,11 +40,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		Cookie[] cookies = request.getCookies();
 	
 		if(cookies != null) {
-			Arrays.stream(cookies).map(cookie -> cookie.getName() + " " + cookie.getValue()).forEach(System.out::println);
 			String username = null;
 			String jwt = Arrays.stream(cookies)
-					.filter(cookie -> cookie.getName() == "Authorization")
-					.map(cookie -> cookie.getValue())
+					.filter(cookie -> cookie.getName().equals("Authorization"))
+					.map(cookie ->cookie.getValue())
 					.findAny()
 					.get();
 			

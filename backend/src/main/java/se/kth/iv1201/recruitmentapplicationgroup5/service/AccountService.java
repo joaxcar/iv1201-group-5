@@ -138,17 +138,5 @@ public class AccountService implements UserDetailsService{
 		return repository.findByUsername(username).stream()
 				.findFirst()
 				.orElseThrow(() -> new UsernameNotFoundException("Invalid user credentials."));
-
-		//return createMockUser();
 	}
-	
-	//TODO: Ta bort denna när man kör på riktigt
-	private UserDetails createMockUser() {
-		var mockUser = new Account();
-		mockUser.setUsername("testuser");
-		mockUser.setPassword("testpass");
-		mockUser.setAuthority(Authority.APPLICANT);
-		return mockUser;
-	}
-
 }
