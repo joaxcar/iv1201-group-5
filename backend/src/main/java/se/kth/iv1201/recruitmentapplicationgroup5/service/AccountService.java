@@ -38,6 +38,7 @@ public class AccountService {
 	 * Account created from the information in {@link RegistrationDetails}.
 	 *
 	 * @param registrationDetails - details for new account
+	 * @return - created account as DTO
 	 */
 	public AccountDTO addAccount(@Valid RegistrationDetails registrationDetails) {
 		Account newAccount = registrationToAccount(registrationDetails);
@@ -46,6 +47,15 @@ public class AccountService {
 		return newAccountDTO;
 	}
 
+	/**
+	 * List accounts with matching username.
+	 * 
+	 * Returns a list of {@link se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO}
+	 * matching username given as parameter.
+	 *
+	 * @param username - username to search for
+	 * @return - list of matching accounts as DTOs
+	 */
 	public List<AccountDTO> findAccount(String username) {
 		List<Account> account = repository.findByUsername(username);
 		return account.stream().map(acc -> this.accountToDTO(acc)).collect(Collectors.toList());
