@@ -43,23 +43,21 @@ function LoginContainer() {
 		setTimeout(() => setAlert({ ...alert, open: false }), 7000);
 	}
 
-	function handleFormSubmit(registrationDetails, event) {
+	function handleFormSubmit(loginDetails, event) {
 		event.preventDefault();
-		//		const formattedRegistrationDetails = formatDetails(registrationDetails);
+		console.log(loginDetails);
 
-		// postToAPI(endpoints.ACCOUNTS, formattedRegistrationDetails)
-		// 	.then((response) => {
-		// 		event.target.reset();
-		// 		showAlert(alertTypes.SUCCESS, "Registration was successful");
-		// 	})
-		// 	.catch((error) => {
-		// 		if (error.message === "Conflict") {
-		// 			document.getElementsByName("username")[0].value = "";
-		// 			showAlert(alertTypes.ERROR, "User already exists");
-		// 		} else {
-		// 			showAlert(alertTypes.ERROR, "Something went wrong");
-		// 		}
-		// 	});
+		postToAPI(endpoints.AUTHENTICATE, loginDetails)
+			.then((response) => {
+				event.target.reset();
+				showAlert(alertTypes.SUCCESS, "Login successful");
+			})
+			.catch((error) => {
+				showAlert(
+					alertTypes.ERROR,
+					"Could not login with given credentials"
+				);
+			});
 	}
 
 	return (
