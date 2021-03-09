@@ -53,6 +53,7 @@ function LoginContainer() {
 				showAlert(alertTypes.SUCCESS, "Login successful");
 			})
 			.catch((error) => {
+				console.log(error);
 				showAlert(
 					alertTypes.ERROR,
 					"Could not login with given credentials"
