@@ -1,20 +1,19 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.FullName;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Person;
 
-@DataJpaTest
+@TestPropertySource(locations = "/integration-test.properties")
+@SpringBootTest
 class AccountRepositoryTest {
 
 	@Autowired
@@ -31,11 +30,24 @@ class AccountRepositoryTest {
 		person.setBirthDate(LocalDate.parse("1988-01-01"));
 		Account account = new Account();
 		account.setPassword("abcdefgh");
+		account.setUsername("gurka");
 		account.setPerson(person);
 		person.setAccount(account);
 		Account savedAccount = repo.save(account);
-		Assertions.assertEquals(savedAccount.getPerson(), person);
-		Assertions.assertEquals(savedAccount.getPassword(), "abcdefgh");
+		Account loadedAccount = repo.findById(savedAccount.getId()).get();
+		Assertions.assertEquals(loadedAccount.getPassword(), "abcdefgh");
+		Assertions.assertEquals(loadedAccount.getPerson().getName().getFirstName(), "Joe");
 	}
+	
+	@Test
+	void shouldNotSaveAnAccountWithoutAPerson() {
+		Account account = new Account();
+		account.setPassword("abcdefgh");
+		account.setUsername("gurka");
+		account.setPerson(null);
+		Assertions.assertThrows(Exception.class, () -> repo.save(account));
+		
+	}
+	
 
 }
