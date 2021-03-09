@@ -20,6 +20,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import se.kth.iv1201.recruitmentapplicationgroup5.service.AccountService;
 import se.kth.iv1201.recruitmentapplicationgroup5.util.JwtUtil;
 
+/**
+ * Filter checking for authorization cookie, and adding it to 
+ *
+ */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 	
@@ -34,7 +38,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		
 		Cookie[] cookies = request.getCookies();
+	
 		if(cookies != null) {
+			Arrays.stream(cookies).map(cookie -> cookie.getName() + " " + cookie.getValue()).forEach(System.out::println);
 			String username = null;
 			String jwt = Arrays.stream(cookies)
 					.filter(cookie -> cookie.getName() == "Authorization")

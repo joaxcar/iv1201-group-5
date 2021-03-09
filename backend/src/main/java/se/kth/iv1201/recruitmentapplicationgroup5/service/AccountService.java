@@ -80,6 +80,7 @@ public class AccountService implements UserDetailsService{
 		account.setPerson(person);
 		account.setUsername(details.getUsername());
 		account.setPassword(details.getPassword());
+		account.setAuthority(Authority.APPLICANT);
 		
 		return account;
 	}
@@ -113,15 +114,12 @@ public class AccountService implements UserDetailsService{
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		/* Riktiga funktionen sen
-		var user = repository.findByUsername(username);
-		if(user == null) {
-			throw new UsernameNotFoundException("Invalid user credentials.");
-		}
-		return user;
-		*/
-		
-		return createMockUser();
+
+		return repository.findByUsername(username).stream()
+				.findFirst()
+				.orElseThrow(() -> new UsernameNotFoundException("Invalid user credentials."));
+
+		//return createMockUser();
 	}
 	
 	//TODO: Ta bort denna när man kör på riktigt

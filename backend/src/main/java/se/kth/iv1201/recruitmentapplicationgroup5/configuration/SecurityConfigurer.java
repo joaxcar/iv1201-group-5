@@ -51,12 +51,22 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 	
+	/**
+	 * Configures Spring Boot with a default AuthenticationManager.
+	 * 
+	 * @return Default AuthenticationManager.
+	 */
 	@Override
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
 	
+	/**
+	 * Configures Spring Boot to use a PasswordEncoder.
+	 * 
+	 * @return Chosen PasswordEncoder.
+	 */
 	@SuppressWarnings("deprecation") // Not really deprecated, you just aren't supposed to use it.
 	@Bean
 	public PasswordEncoder passwordEncoder() {
