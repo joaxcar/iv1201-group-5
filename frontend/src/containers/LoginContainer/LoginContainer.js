@@ -45,7 +45,6 @@ function LoginContainer() {
 
 	function handleFormSubmit(loginDetails, event) {
 		event.preventDefault();
-		console.log(loginDetails);
 
 		postToAPI(endpoints.AUTHENTICATE, loginDetails)
 			.then((response) => {
@@ -53,7 +52,6 @@ function LoginContainer() {
 				showAlert(alertTypes.SUCCESS, "Login successful");
 			})
 			.catch((error) => {
-				console.log(error);
 				showAlert(
 					alertTypes.ERROR,
 					"Could not login with given credentials"
