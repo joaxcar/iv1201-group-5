@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.integration.AccountRepository;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
+import se.kth.iv1201.recruitmentapplicationgroup5.model.Authority;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.FullName;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Person;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO;
@@ -29,7 +33,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
 @Service
 @Validated
 @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
-public class AccountService {
+public class AccountService implements UserDetailsService{
 
 	@Autowired
 	AccountRepository repository;
@@ -96,6 +100,38 @@ public class AccountService {
 		var password = account.getPassword();
 		
 		return new AccountDTO(accountId, person, username, password);
+	}
+
+	/**OBS: Just nu en mock
+	 * Loads a user from the DB by username. Implementation of userdetailservice funciton needed
+	 * for spring security authentication.
+	 * 
+	 * @param username Username of the account to fetch.
+	 * 
+	 * @return Account details of account with username username
+	 * 
+	 * @throws UsernameNotFoundException Thrown if no account found with username username
+	 */
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		/* Riktiga funktionen sen
+		var user = repository.findByUsername(username);
+		if(user == null) {
+			throw new UsernameNotFoundException("Invalid user credentials.");
+		}
+		return user;
+		*/
+		
+		return createMockUser();
+	}
+	
+	//TODO: Ta bort denna när man kör på riktigt
+	private UserDetails createMockUser() {
+		var mockUser = new Account();
+		mockUser.setUsername("testuser");
+		mockUser.setPassword("testpass");
+		mockUser.setAuthority(Authority.APPLICANT);
+		return mockUser;
 	}
 
 }
