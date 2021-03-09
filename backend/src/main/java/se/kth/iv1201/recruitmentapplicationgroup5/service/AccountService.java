@@ -1,5 +1,8 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,11 @@ public class AccountService {
 		newAccount = repository.save(newAccount);
 		AccountDTO newAccountDTO = accountToDTO(newAccount);
 		return newAccountDTO;
+	}
+
+	public List<AccountDTO> findAccount(String username) {
+		List<Account> account = repository.findByUsername(username);
+		return account.stream().map(acc -> this.accountToDTO(acc)).collect(Collectors.toList());
 	}
 
 	private Account registrationToAccount(final RegistrationDetails details) {
