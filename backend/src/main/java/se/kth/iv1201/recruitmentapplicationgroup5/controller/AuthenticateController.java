@@ -1,5 +1,8 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.controller;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -19,6 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import se.kth.iv1201.recruitmentapplicationgroup5.service.AccountService;
 import se.kth.iv1201.recruitmentapplicationgroup5.util.JwtUtil;
 
+/**
+ * Controller for the authentication endpoint of the REST-API
+ *
+ */
 @RestController
 @Validated
 @RequestMapping("/api/v1")
@@ -34,8 +41,15 @@ public class AuthenticateController {
 	@Autowired
 	private JwtUtil jwtUtil;
 	
+	/**
+	 * Creates a JWT from an account when receiving account credentials.
+	 * @param req Credentials for an account
+	 * @param res
+	 * @return
+	 * @throws Exception
+	 */
 	@PostMapping(value = "/authenticate")
-	public ResponseEntity<String> createAuthenticationToken(@Valid @RequestBody AuthenticationRequest req, HttpServletResponse res) throws Exception {
+	public ResponseEntity<List<String>> createAuthenticationToken(@Valid @RequestBody AuthenticationRequest req, HttpServletResponse res) throws Exception {
 		
 		//TODO: adda felhantering för BadCredentialsException som denna slänger.
 		manager.authenticate(new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
@@ -45,7 +59,7 @@ public class AuthenticateController {
 		jwtCookie.setMaxAge(TEN_HOURS_IN_SECONDS);
 		jwtCookie.setHttpOnly(true);
 		res.addCookie(jwtCookie);
-		return new ResponseEntity<String>("Successful login", HttpStatus.OK); 
+		return new ResponseEntity<List<String>>(Arrays.asList("Successful login"), HttpStatus.OK); 
 	}
 	
 
