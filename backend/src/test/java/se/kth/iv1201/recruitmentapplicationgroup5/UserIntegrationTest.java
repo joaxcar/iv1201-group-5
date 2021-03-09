@@ -1,5 +1,6 @@
 package se.kth.iv1201.recruitmentapplicationgroup5;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -105,5 +106,28 @@ class UserIntegrationTest {
 				.content("{" + name + ", " + username + ", " + password + ", " + email + ", " + dateOfBirth + "}"))
 				.andExpect(status().isConflict());
 	}
+	
+	@Test
+	public void returnsAccountDetails() throws Exception {
+		username = "\"username\":\"newuser\"";
+		mockMvc.perform(post("/api/v1/accounts")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{" + name + ", " + username + ", " + password + ", " + email + ", " + dateOfBirth + "}"))
+				.andExpect(status().isCreated());
 
+		mockMvc.perform(get("/api/v1/account/1"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.person.name.first").value("Richard"))
+				.andExpect(jsonPath("$.person.name.last").value("Wallin"))
+				.andExpect(jsonPath("$.person.birthDate").value("1900-05-11"))
+				.andExpect(jsonPath("$.person.email").value("asd@hej.se"))
+				.andExpect(jsonPath("$.username").value("newuser"))
+				.andExpect(jsonPath("$.password").value("password"));	
+	}
+
+	@Test
+	public void returnsNotFoundWhenNoaccount() throws Exception {
+		mockMvc.perform(get("/api/v1/account/1234"))
+				.andExpect(status().isNotFound());
+	}
 }

@@ -12,6 +12,8 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -19,6 +21,7 @@ import lombok.Data;
  *
  */
 @Data
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class RegistrationDetails {
 	@NotNull(message = "Must have field: name")
 	@Valid

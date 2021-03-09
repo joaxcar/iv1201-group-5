@@ -1,6 +1,7 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -10,8 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.integration.AccountRepository;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
@@ -30,8 +31,8 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
  * {@link se.kth.iv1201.recruitmentapplicationgroup5.model.Account}.
  */
 @Service
-
-@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+@Validated
+@Transactional(rollbackFor = Exception.class)
 public class AccountService implements UserDetailsService{
 
 	@Autowired
@@ -64,6 +65,25 @@ public class AccountService implements UserDetailsService{
 	public List<AccountDTO> findAccount(String username) {
 		List<Account> account = repository.findByUsername(username);
 		return account.stream().map(acc -> this.accountToDTO(acc)).collect(Collectors.toList());
+	}
+	
+	/**
+	 * Get account by id.
+	 * 
+	 * Returns a {@link se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO}
+	 * matching id given as parameter.
+	 *
+	 * @param id - account id
+	 * @return - matching account as DTOs
+	 * @throws AccountNotFoundException - if no Account exists with given id
+	 */
+	public AccountDTO getAccount(int id) throws AccountNotFoundException {
+		Optional<Account> account = repository.findById(id);
+		if (account.isPresent()) {
+			return accountToDTO(account.get());
+		} else {
+			throw new AccountNotFoundException("No account with id: " + id);
+		}
 	}
 
 	private Account registrationToAccount(final RegistrationDetails details) {
