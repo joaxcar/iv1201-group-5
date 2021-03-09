@@ -1,8 +1,8 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.integration;
 
-import org.springframework.data.jpa.repository.Query;
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
 
@@ -13,6 +13,15 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
  */
 public interface AccountRepository extends CrudRepository<Account, Integer>{
 
-	@Query("SELECT a FROM Account a WHERE a.username = :username")
-	public Account findByUsername(@Param("username") String username);
+	/**
+	 * Search for accounts by username.
+	 * 
+	 * Returns a list of {@link se.kth.iv1201.recruitmentapplicationgroup5.model.Account}
+	 * matching given username string given as parameter.
+	 *
+	 * @param username - username to search for
+	 * @return - list of Accounts matching username
+	 */
+	List<Account> findByUsername(String username);
+
 }
