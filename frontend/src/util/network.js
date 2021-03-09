@@ -1,5 +1,7 @@
 function handleResponse(response) {
-	if (![200, 201].includes(response.status)) {
+	if (response.status === 409) {
+		throw new Error("Conflict");
+	} else if (![200, 201].includes(response.status)) {
 		throw new Error("Something went wrong");
 	} else {
 		return response.json();
