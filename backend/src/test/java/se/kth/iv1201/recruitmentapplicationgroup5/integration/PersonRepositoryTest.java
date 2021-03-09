@@ -20,26 +20,34 @@ class PersonRepositoryTest {
 	
 	@Test
 	void shouldSaveAValidPerson() {
+		var firstName = "Joe";
+		var lastName = "Doe";
+		var email = "test@test.com";
+		var birthDate = "1988-01-01";
+		var wrongFirstName = "Johnny";
 		FullName fullName = new FullName();
-		fullName.setFirstName("Joe");
-		fullName.setLastName("Doe");
+		fullName.setFirstName(firstName);
+		fullName.setLastName(lastName);
+		
 		Person person = new Person();
-		person.setEmail("test@test.com");
+		person.setEmail(email);
 		person.setName(fullName);
-		person.setBirthDate(LocalDate.parse("1987-02-01"));
+		person.setBirthDate(LocalDate.parse(birthDate));
 		Person savedPerson = repo.save(person);
 		Integer id = savedPerson.getId();
 		Person p = repo.findById(id).get();
-		Assertions.assertEquals(p.getEmail(), "test@test.com");
-		Assertions.assertNotEquals(p.getName().getFirstName(), "Johnny");
+		Assertions.assertEquals(p.getEmail(), email);
+		Assertions.assertNotEquals(p.getName().getFirstName(), wrongFirstName);
 	}
 	
 	@Test
 	void shouldNotSaveAPersonWithoutAName() {
+		var email = "test@test.com";
+		var birthDate = "1988-01-01";
 		Person person = new Person();
-		person.setEmail("test@test.com");
+		person.setEmail(email);
 		person.setName(null);
-		person.setBirthDate(LocalDate.parse("1987-02-01"));
+		person.setBirthDate(LocalDate.parse(birthDate));
 		Assertions.assertThrows(Exception.class, () -> repo.save(person));
 	}
 
