@@ -7,6 +7,8 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -57,14 +59,32 @@ public class ApiExceptionHandler {
 			ConstraintViolationException e,
 			WebRequest req)
 	{
-		log.debug(e.getMessage());
 		return handleInternalError(e, req);
 	}
 	
 	@ExceptionHandler(value = Exception.class)
 	public ResponseEntity<Object> handleAllExceptions(Exception e, WebRequest req) {
-		log.debug(e.getMessage());
 		return handleInternalError(e, req);
+	}
+	
+	@ExceptionHandler(value = UsernameNotFoundException.class)
+	public ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException e, WebRequest req) {
+		log.debug(e.getMessage());
+		var status = HttpStatus.BAD_REQUEST;
+		String url = extractUrl(req);
+		String errorMsg = e.getMessage();
+		var body = createErrorBody(status, url, errorMsg);
+		return ResponseEntity.status(status).body(body);
+	}
+	
+	@ExceptionHandler(value = BadCredentialsException.class)
+	public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException e, WebRequest req) {
+		log.debug(e.getMessage());
+		var status = HttpStatus.BAD_REQUEST;
+		String url = extractUrl(req);
+		String errorMsg = "Invalid user credentials.";
+		var body = createErrorBody(status, url, errorMsg);
+		return ResponseEntity.status(status).body(body);
 	}
 	
 	private ResponseEntity<Object> handleInternalError(Exception e, WebRequest req) {
