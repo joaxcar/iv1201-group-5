@@ -1,12 +1,14 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +36,8 @@ class AuthenticateControllerTest {
 	String dateOfBirthJson = "\"dateOfBirth\": \"1900-05-11\"";
 	String username = "rilltester";
 	String password = "password";
+	String id;
+	String jwt;
 	
 	@BeforeEach
 	public void setup() throws Exception {
@@ -53,8 +57,22 @@ class AuthenticateControllerTest {
 		addCorrectUser();
 	}
 	
+	@Test
+	void canAuthenticateUser() throws Exception {
+
+		jwt = mockMvc.perform(post("/api/v1/authenticate")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content("{" + usernameJson + ", " + passwordJson + "}"))
+			.andExpect(status().isOk())
+			.andExpect(cookie().exists("Authorization"))
+			.andExpect(cookie().maxAge("Authorization", 36000))
+			.andReturn().getResponse().getCookie("Authorization").getValue();
+		
+		assertNotNull(jwt, "JWT received is null");
+	}
+	
 	private void addCorrectUser() throws Exception {
-		mockMvc.perform(post("/api/v1/accounts")
+		id = mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{" + nameJson + ", " + usernameJson + ", " + passwordJson + ", " + emailJson + ", " + dateOfBirthJson + "}"))
 				.andExpect(status().isCreated())
@@ -63,7 +81,8 @@ class AuthenticateControllerTest {
 				.andExpect(jsonPath("$.person.birthDate").value("1900-05-11"))
 				.andExpect(jsonPath("$.person.email").value("asd@hej.se"))
 				.andExpect(jsonPath("$.username").value(username))
-				.andExpect(jsonPath("$.password").value(password));	
+				.andExpect(jsonPath("$.password").value(password))
+				.andReturn().getResponse().getContentAsString().substring(6, 7);
 	}
 
 }
