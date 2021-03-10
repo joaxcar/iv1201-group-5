@@ -7,12 +7,16 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.integration.AccountRepository;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
+import se.kth.iv1201.recruitmentapplicationgroup5.model.Authority;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.FullName;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Person;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO;
@@ -29,7 +33,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
 @Service
 @Validated
 @Transactional(rollbackFor = Exception.class)
-public class AccountService {
+public class AccountService implements UserDetailsService{
 
 	@Autowired
 	AccountRepository repository;
@@ -96,6 +100,7 @@ public class AccountService {
 		account.setPerson(person);
 		account.setUsername(details.getUsername());
 		account.setPassword(details.getPassword());
+		account.setAuthority(Authority.APPLICANT);
 		
 		return account;
 	}
@@ -117,4 +122,21 @@ public class AccountService {
 		return new AccountDTO(accountId, person, username, password);
 	}
 
+	/**
+	 * Loads a user from the DB by username. Implementation of userdetailservice funciton needed
+	 * for spring security authentication.
+	 * 
+	 * @param username Username of the account to fetch.
+	 * 
+	 * @return Account details of account with username username
+	 * 
+	 * @throws UsernameNotFoundException Thrown if no account found with username username
+	 */
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+		return repository.findByUsername(username).stream()
+				.findFirst()
+				.orElseThrow(() -> new UsernameNotFoundException("Invalid user credentials."));
+	}
 }

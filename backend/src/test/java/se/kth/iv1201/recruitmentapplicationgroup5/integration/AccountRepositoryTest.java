@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
+import se.kth.iv1201.recruitmentapplicationgroup5.model.Authority;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.FullName;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Person;
 
@@ -67,6 +68,7 @@ class AccountRepositoryTest {
 		account.setPassword(password);
 		account.setUsername(username);
 		account.setPerson(person);
+		account.setAuthority(Authority.APPLICANT);
 		person.setAccount(account);
 		return account;
 	}
