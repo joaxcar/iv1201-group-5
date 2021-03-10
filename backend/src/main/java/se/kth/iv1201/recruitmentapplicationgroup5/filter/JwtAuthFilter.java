@@ -43,9 +43,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			String username = null;
 			String jwt = Arrays.stream(cookies)
 					.filter(cookie -> cookie.getName().equals("Authorization"))
-					.map(cookie ->cookie.getValue())
+					.map(Cookie::getValue)
 					.findAny()
-					.get();
+					.orElse(null);
 			
 			if(jwt != null) {
 				username = util.extractUsername(jwt);

@@ -31,7 +31,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.util.JwtUtil;
 @Validated
 @RequestMapping("/api/v1")
 public class AuthenticateController {
-	private final int TEN_HOURS_IN_SECONDS = 36000;
+	private final static int TEN_HOURS_IN_SECONDS = 36000;
 	
 	@Autowired
 	private AuthenticationManager manager;
@@ -62,7 +62,7 @@ public class AuthenticateController {
 		jwtCookie.setMaxAge(TEN_HOURS_IN_SECONDS);
 		jwtCookie.setHttpOnly(true);
 		res.addCookie(jwtCookie);
-		return new ResponseEntity<List<String>>(Arrays.asList("Successful login"), HttpStatus.OK); 
+		return new ResponseEntity<>(Arrays.asList("Successful login"), HttpStatus.OK); 
 	}
 	
 

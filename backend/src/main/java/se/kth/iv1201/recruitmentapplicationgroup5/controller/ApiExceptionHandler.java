@@ -89,7 +89,7 @@ public class ApiExceptionHandler {
 	
 	private ResponseEntity<Object> handleInternalError(Exception e, WebRequest req) {
 		log.debug(e.getMessage());
-		log.debug(Arrays.toString(e.getStackTrace()).replaceAll(",", "\n"));
+		log.debug(Arrays.toString(e.getStackTrace()).replace(",", "\n"));
 						
 		var status = HttpStatus.INTERNAL_SERVER_ERROR;
 		String url = extractUrl(req);
