@@ -1,36 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Profile from "../../components/Profile/Profile";
-import endpoints from "../../properties/endpoints";
-import { postToAPI } from "../../util/network";
 import alertTypes from "../../properties/alerttypes";
 import Alert from "../../components/Alert/Alert";
-
-function formatDetails({
-	firstName,
-	lastName,
-	email,
-	birthYear,
-	birthMonth,
-	birthDay,
-	username,
-	password,
-}) {
-	const dateOfBirth = `${birthYear}-${String(birthMonth).padStart(
-		2,
-		"0"
-	)}-${String(birthDay).padStart(2, "0")}`;
-
-	return {
-		name: {
-			first: firstName,
-			last: lastName,
-		},
-		email: email,
-		dateOfBirth,
-		username: username,
-		password: password,
-	};
-}
 
 /**
  * Container for Profile.
@@ -38,34 +9,40 @@ function formatDetails({
  */
 function ProfileContainer({ accountId }) {
 	const [alert, setAlert] = useState({ open: false, type: "", message: "" });
+	const [user, setUser] = useState(null);
 
 	function showAlert(type, message) {
 		setAlert({ open: true, type, message });
 		setTimeout(() => setAlert({ ...alert, open: false }), 7000);
 	}
 
-	function handleFormSubmit(loginDetails, event) {
-		event.preventDefault();
-
-		postToAPI(endpoints.AUTHENTICATE, loginDetails)
-			.then((response) => {
-				event.target.reset();
-				showAlert(alertTypes.SUCCESS, "Login successful");
+	function loadUser(id) {
+		fetch("/api/v1/account/" + id, {
+			headers: { "Content-Type": "application/json" },
+		})
+			.then((resp) => resp.json())
+			.then((resp) => {
+				setUser({
+					name: `${resp.person.name.first} ${resp.person.name.last}`,
+					birthDate: resp.person.birthDate,
+					email: resp.person.email,
+				});
 			})
-			.catch((error) => {
-				showAlert(
-					alertTypes.ERROR,
-					"Could not login with given credentials"
-				);
-			});
+			.catch((err) =>
+				showAlert(alertTypes.ERROR, "Something went wrong")
+			);
 	}
+
+	useEffect(() => {
+		loadUser(accountId);
+	}, []);
 
 	return (
 		<>
 			{alert.open ? (
 				<Alert type={alert.type} message={alert.message} />
 			) : null}
-			<Profile accountId={accountId} />
+			<Profile accountId={accountId} user={user} />
 		</>
 	);
 }

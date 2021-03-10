@@ -5,33 +5,6 @@ import { postToAPI } from "../../util/network";
 import alertTypes from "../../properties/alerttypes";
 import Alert from "../../components/Alert/Alert";
 
-function formatDetails({
-	firstName,
-	lastName,
-	email,
-	birthYear,
-	birthMonth,
-	birthDay,
-	username,
-	password,
-}) {
-	const dateOfBirth = `${birthYear}-${String(birthMonth).padStart(
-		2,
-		"0"
-	)}-${String(birthDay).padStart(2, "0")}`;
-
-	return {
-		name: {
-			first: firstName,
-			last: lastName,
-		},
-		email: email,
-		dateOfBirth,
-		username: username,
-		password: password,
-	};
-}
-
 /**
  * Container for Login.
  */
@@ -49,7 +22,6 @@ function LoginContainer({ onLogin }) {
 		postToAPI(endpoints.AUTHENTICATE, loginDetails)
 			.then((response) => {
 				event.target.reset();
-				showAlert(alertTypes.SUCCESS, "Login successful");
 				onLogin(response.id);
 			})
 			.catch((error) => {
