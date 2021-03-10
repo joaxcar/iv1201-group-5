@@ -21,7 +21,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.service.AccountService;
 import se.kth.iv1201.recruitmentapplicationgroup5.util.JwtUtil;
 
 /**
- * Filter checking for authorization cookie, and adding it to 
+ * Filter checking for authorization cookie, and authenticating user if found.
  *
  */
 @Component
@@ -43,9 +43,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			String username = null;
 			String jwt = Arrays.stream(cookies)
 					.filter(cookie -> cookie.getName().equals("Authorization"))
-					.map(cookie ->cookie.getValue())
+					.map(Cookie::getValue)
 					.findAny()
-					.get();
+					.orElse(null);
 			
 			if(jwt != null) {
 				username = util.extractUsername(jwt);

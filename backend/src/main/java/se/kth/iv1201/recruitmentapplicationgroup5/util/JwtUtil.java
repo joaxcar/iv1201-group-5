@@ -63,7 +63,10 @@ public class JwtUtil {
 	 */
 	public String generateToken(UserDetails account) {
 		var claims = new HashMap<String, Object>();
-		account.getAuthorities().stream().map(authority -> claims.put("authority", authority.toString()));
+		
+		String authority = account.getAuthorities().iterator().next().getAuthority();
+		claims.put("authority", authority);
+		
 		return createToken(claims, account.getUsername());
 	}
 	
@@ -75,7 +78,7 @@ public class JwtUtil {
 	 * 
 	 * @return true if token is valid, false otherwise.
 	 */
-	public Boolean validateToken(String token, UserDetails userDetails) {
+	public boolean validateToken(String token, UserDetails userDetails) {
 		var username = extractUsername(token);
 		return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
 	}
@@ -88,7 +91,7 @@ public class JwtUtil {
 			.compact();
 	}
 	
-	private Boolean isTokenExpired(String token) {
+	private boolean isTokenExpired(String token) {
 		return extractExpiration(token).before(new Date());
 	}
 	
