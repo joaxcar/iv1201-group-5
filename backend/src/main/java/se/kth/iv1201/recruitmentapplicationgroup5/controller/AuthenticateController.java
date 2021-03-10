@@ -3,15 +3,11 @@ package se.kth.iv1201.recruitmentapplicationgroup5.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.Arrays;
-import java.util.List;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,7 +31,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.util.JwtUtil;
 @Validated
 @RequestMapping("/api/v1")
 public class AuthenticateController {
-	private final static int TEN_HOURS_IN_SECONDS = 36000;
+	private static final int TEN_HOURS_IN_SECONDS = 36000;
 	
 	@Autowired
 	private AuthenticationManager manager;
@@ -73,8 +69,6 @@ public class AuthenticateController {
 		loggedInUserInfo.add(linkTo(methodOn(AccountController.class).get(loggedInUserInfo.getId())).withSelfRel());
 		
 		return ResponseEntity.ok(loggedInUserInfo);
-		
-		//return new ResponseEntity<>(Arrays.asList("Successful login"), HttpStatus.OK); 
 	}
 	
 
