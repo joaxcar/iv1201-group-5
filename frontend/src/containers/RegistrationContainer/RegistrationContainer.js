@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import Registration from "../../components/Registration/Registration";
 import endpoints from "../../properties/endpoints";
 import { postToAPI } from "../../util/network";

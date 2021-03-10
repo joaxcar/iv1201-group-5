@@ -53,6 +53,7 @@ function Login({ onSubmit }) {
 							<TextField
 								label="Password"
 								name="password"
+								type="password"
 								inputRef={register}
 								fullWidth
 								error={validationErrors.password ? true : false}

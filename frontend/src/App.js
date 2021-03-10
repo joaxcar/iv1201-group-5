@@ -8,7 +8,8 @@ import ProfileContainer from "./containers/ProfileContainer/ProfileContainer";
 import Alert from "./components/Alert/Alert";
 
 const AlertContext = React.createContext();
-export { AlertContext };
+const UserContext = React.createContext();
+export { AlertContext, UserContext };
 
 /**
  * Main function of the application
@@ -24,6 +25,10 @@ function App() {
 	function showAlert(type, message) {
 		setAlert({ open: true, type, message });
 		setTimeout(() => setAlert({ ...alert, open: false }), 7000);
+	}
+
+	function logout() {
+		setSignedInState({ isSignedIn: false, accountId: null });
 	}
 
 	let history = useHistory();
@@ -42,28 +47,30 @@ function App() {
 		<>
 			<CssBaseline />
 			<AlertContext.Provider value={showAlert}>
-				<Layout>
-					<Switch>
-						<Route exact path="/">
-							<RegistrationContainer />
-						</Route>
-						<Route path="/login">
-							<LoginContainer onLogin={onLogin} />
-						</Route>
-						<Route path="/register">
-							<RegistrationContainer />
-						</Route>
-						<Route path="/profile">
-							{signedInState.isSignedIn ? (
-								<ProfileContainer
-									accountId={signedInState.accountId}
-								/>
-							) : (
-								<Redirect to="/login" />
-							)}
-						</Route>
-					</Switch>
-				</Layout>
+				<UserContext.Provider value={{ signedInState, logout }}>
+					<Layout>
+						<Switch>
+							<Route exact path="/">
+								<RegistrationContainer />
+							</Route>
+							<Route path="/login">
+								<LoginContainer onLogin={onLogin} />
+							</Route>
+							<Route path="/register">
+								<RegistrationContainer />
+							</Route>
+							<Route path="/profile">
+								{signedInState.isSignedIn ? (
+									<ProfileContainer
+										accountId={signedInState.accountId}
+									/>
+								) : (
+									<Redirect to="/login" />
+								)}
+							</Route>
+						</Switch>
+					</Layout>
+				</UserContext.Provider>
 			</AlertContext.Provider>
 			{alert.open ? (
 				<Alert type={alert.type} message={alert.message} />

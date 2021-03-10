@@ -3,7 +3,7 @@ import classes from "./profile.module.css";
 
 /**
  * Profile page for a signed in user
- * @param {number} accountId - The account id for the user
+ * @param {object} user - Information about the user.
  */
 function Profile({ user }) {
 	return (

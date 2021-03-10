@@ -7,6 +7,7 @@ import { AlertContext } from "../../App";
 
 /**
  * Container for Login.
+ * @param {function} onLogin - The callback function to run on successfull login
  */
 function LoginContainer({ onLogin }) {
 	const showAlert = useContext(AlertContext);
