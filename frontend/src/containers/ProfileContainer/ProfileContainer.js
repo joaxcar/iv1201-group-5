@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { getFromAPI } from "../../util/network";
+import endpoints from "../../properties/endpoints";
 import Profile from "../../components/Profile/Profile";
 import alertTypes from "../../properties/alerttypes";
 import Alert from "../../components/Alert/Alert";
@@ -16,11 +18,9 @@ function ProfileContainer({ accountId }) {
 		setTimeout(() => setAlert({ ...alert, open: false }), 7000);
 	}
 
-	function loadUser(id) {
-		fetch("/api/v1/account/" + id, {
-			headers: { "Content-Type": "application/json" },
-		})
-			.then((resp) => resp.json())
+	useEffect(() => {
+		const url = `${endpoints.ACCOUNT}/${accountId}`;
+		getFromAPI(url)
 			.then((resp) => {
 				setUser({
 					name: `${resp.person.name.first} ${resp.person.name.last}`,
@@ -31,10 +31,6 @@ function ProfileContainer({ accountId }) {
 			.catch((err) =>
 				showAlert(alertTypes.ERROR, "Something went wrong")
 			);
-	}
-
-	useEffect(() => {
-		loadUser(accountId);
 	}, []);
 
 	return (
