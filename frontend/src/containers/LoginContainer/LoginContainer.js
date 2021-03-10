@@ -1,20 +1,15 @@
-import { useState } from "react";
+import { useContext } from "react";
 import Login from "../../components/Login/Login";
 import endpoints from "../../properties/endpoints";
 import { postToAPI } from "../../util/network";
 import alertTypes from "../../properties/alerttypes";
-import Alert from "../../components/Alert/Alert";
+import { AlertContext } from "../../App";
 
 /**
  * Container for Login.
  */
 function LoginContainer({ onLogin }) {
-	const [alert, setAlert] = useState({ open: false, type: "", message: "" });
-
-	function showAlert(type, message) {
-		setAlert({ open: true, type, message });
-		setTimeout(() => setAlert({ ...alert, open: false }), 7000);
-	}
+	const showAlert = useContext(AlertContext);
 
 	function handleFormSubmit(loginDetails, event) {
 		event.preventDefault();
@@ -32,14 +27,7 @@ function LoginContainer({ onLogin }) {
 			});
 	}
 
-	return (
-		<>
-			{alert.open ? (
-				<Alert type={alert.type} message={alert.message} />
-			) : null}
-			<Login onSubmit={handleFormSubmit} />
-		</>
-	);
+	return <Login onSubmit={handleFormSubmit} />;
 }
 
 export default LoginContainer;

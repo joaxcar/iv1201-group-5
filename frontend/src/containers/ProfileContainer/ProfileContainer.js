@@ -1,22 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getFromAPI } from "../../util/network";
 import endpoints from "../../properties/endpoints";
 import Profile from "../../components/Profile/Profile";
 import alertTypes from "../../properties/alerttypes";
-import Alert from "../../components/Alert/Alert";
+import { AlertContext } from "../../App";
 
 /**
  * Container for Profile.
  * * @param {number} accountId - The account id for the user
  */
 function ProfileContainer({ accountId }) {
-	const [alert, setAlert] = useState({ open: false, type: "", message: "" });
 	const [user, setUser] = useState(null);
-
-	function showAlert(type, message) {
-		setAlert({ open: true, type, message });
-		setTimeout(() => setAlert({ ...alert, open: false }), 7000);
-	}
+	const showAlert = useContext(AlertContext);
 
 	useEffect(() => {
 		const url = `${endpoints.ACCOUNT}/${accountId}`;
@@ -33,14 +28,7 @@ function ProfileContainer({ accountId }) {
 			);
 	}, []);
 
-	return (
-		<>
-			{alert.open ? (
-				<Alert type={alert.type} message={alert.message} />
-			) : null}
-			<Profile accountId={accountId} user={user} />
-		</>
-	);
+	return <Profile accountId={accountId} user={user} />;
 }
 
 export default ProfileContainer;

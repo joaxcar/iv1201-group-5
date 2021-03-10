@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Registration from "../../components/Registration/Registration";
 import endpoints from "../../properties/endpoints";
 import { postToAPI } from "../../util/network";
 import alertTypes from "../../properties/alerttypes";
-import Alert from "../../components/Alert/Alert";
+import { AlertContext } from "../../App";
 
 function formatDetails({
 	firstName,
@@ -36,12 +36,7 @@ function formatDetails({
  * Container for Registration.
  */
 function RegistrationContainer() {
-	const [alert, setAlert] = useState({ open: false, type: "", message: "" });
-
-	function showAlert(type, message) {
-		setAlert({ open: true, type, message });
-		setTimeout(() => setAlert({ ...alert, open: false }), 7000);
-	}
+	const showAlert = useContext(AlertContext);
 
 	function handleFormSubmit(registrationDetails, event) {
 		event.preventDefault();
@@ -50,26 +45,19 @@ function RegistrationContainer() {
 		postToAPI(endpoints.ACCOUNTS, formattedRegistrationDetails)
 			.then((response) => {
 				event.target.reset();
-				showAlert(alertTypes.SUCCESS, "Registration was successful")
+				showAlert(alertTypes.SUCCESS, "Registration was successful");
 			})
-			.catch((error) =>{
-				if(error.message === "Conflict") {
-					document.getElementsByName('username')[0].value = "";
-					showAlert(alertTypes.ERROR, "User already exists")
+			.catch((error) => {
+				if (error.message === "Conflict") {
+					document.getElementsByName("username")[0].value = "";
+					showAlert(alertTypes.ERROR, "User already exists");
 				} else {
-					showAlert(alertTypes.ERROR, "Something went wrong")
+					showAlert(alertTypes.ERROR, "Something went wrong");
 				}
 			});
 	}
 
-	return (
-		<>
-			{alert.open ? (
-				<Alert type={alert.type} message={alert.message} />
-			) : null}
-			<Registration onSubmit={handleFormSubmit} />
-		</>
-	);
+	return <Registration onSubmit={handleFormSubmit} />;
 }
 
 export default RegistrationContainer;
