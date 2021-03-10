@@ -1,5 +1,8 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO;
 import se.kth.iv1201.recruitmentapplicationgroup5.service.AccountService;
 import se.kth.iv1201.recruitmentapplicationgroup5.util.JwtUtil;
 
@@ -50,19 +54,27 @@ public class AuthenticateController {
 	 * @throws BadCredentialsException When invalid user credentials are supplied
 	 */
 	@PostMapping(value = "/authenticate")
-	public ResponseEntity<List<String>> createAuthenticationToken(
+	public ResponseEntity<AccountDTO> createAuthenticationToken(
 			@Valid @RequestBody AuthenticationRequest req, 
 			HttpServletResponse res
 			) throws BadCredentialsException {
 		
 		manager.authenticate(new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
+		
 		final UserDetails user = service.loadUserByUsername(req.getUsername());
 		final String jwt = jwtUtil.generateToken(user);
+		
 		final Cookie jwtCookie = new Cookie("Authorization", jwt);
 		jwtCookie.setMaxAge(TEN_HOURS_IN_SECONDS);
-		jwtCookie.setHttpOnly(true);
+		jwtCookie.setHttpOnly(false);
 		res.addCookie(jwtCookie);
-		return new ResponseEntity<>(Arrays.asList("Successful login"), HttpStatus.OK); 
+		
+		AccountDTO loggedInUserInfo = service.findAccount(user.getUsername()).get(0);
+		loggedInUserInfo.add(linkTo(methodOn(AccountController.class).get(loggedInUserInfo.getId())).withSelfRel());
+		
+		return ResponseEntity.ok(loggedInUserInfo);
+		
+		//return new ResponseEntity<>(Arrays.asList("Successful login"), HttpStatus.OK); 
 	}
 	
 
