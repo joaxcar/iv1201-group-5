@@ -35,7 +35,7 @@ function formatDetails({
 /**
  * Container for Login.
  */
-function LoginContainer() {
+function LoginContainer({ onLogin }) {
 	const [alert, setAlert] = useState({ open: false, type: "", message: "" });
 
 	function showAlert(type, message) {
@@ -50,6 +50,7 @@ function LoginContainer() {
 			.then((response) => {
 				event.target.reset();
 				showAlert(alertTypes.SUCCESS, "Login successful");
+				onLogin(response.id);
 			})
 			.catch((error) => {
 				showAlert(

@@ -33,9 +33,10 @@ function formatDetails({
 }
 
 /**
- * Container for Login.
+ * Container for Profile.
+ * * @param {number} accountId - The account id for the user
  */
-function ProfileContainer() {
+function ProfileContainer({ accountId }) {
 	const [alert, setAlert] = useState({ open: false, type: "", message: "" });
 
 	function showAlert(type, message) {
@@ -64,7 +65,7 @@ function ProfileContainer() {
 			{alert.open ? (
 				<Alert type={alert.type} message={alert.message} />
 			) : null}
-			<Profile onSubmit={handleFormSubmit} />
+			<Profile accountId={accountId} />
 		</>
 	);
 }
