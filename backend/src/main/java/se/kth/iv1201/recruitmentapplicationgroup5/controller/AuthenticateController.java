@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +31,7 @@ import se.kth.iv1201.recruitmentapplicationgroup5.util.JwtUtil;
 @Validated
 @RequestMapping("/api/v1")
 public class AuthenticateController {
-	private final int TEN_HOURS_IN_SECONDS = 36000;
+	private final static int TEN_HOURS_IN_SECONDS = 36000;
 	
 	@Autowired
 	private AuthenticationManager manager;
@@ -44,14 +45,16 @@ public class AuthenticateController {
 	/**
 	 * Creates a JWT from an account when receiving account credentials.
 	 * @param req Credentials for an account
-	 * @param res
-	 * @return
-	 * @throws Exception
+	 * @param res Java EE HTTP response object
+	 * @return Response with JWT
+	 * @throws BadCredentialsException When invalid user credentials are supplied
 	 */
 	@PostMapping(value = "/authenticate")
-	public ResponseEntity<List<String>> createAuthenticationToken(@Valid @RequestBody AuthenticationRequest req, HttpServletResponse res) throws Exception {
+	public ResponseEntity<List<String>> createAuthenticationToken(
+			@Valid @RequestBody AuthenticationRequest req, 
+			HttpServletResponse res
+			) throws BadCredentialsException {
 		
-		//TODO: adda felhantering för BadCredentialsException som denna slänger.
 		manager.authenticate(new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
 		final UserDetails user = service.loadUserByUsername(req.getUsername());
 		final String jwt = jwtUtil.generateToken(user);
@@ -59,7 +62,7 @@ public class AuthenticateController {
 		jwtCookie.setMaxAge(TEN_HOURS_IN_SECONDS);
 		jwtCookie.setHttpOnly(true);
 		res.addCookie(jwtCookie);
-		return new ResponseEntity<List<String>>(Arrays.asList("Successful login"), HttpStatus.OK); 
+		return new ResponseEntity<>(Arrays.asList("Successful login"), HttpStatus.OK); 
 	}
 	
 

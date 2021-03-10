@@ -2,7 +2,6 @@ package se.kth.iv1201.recruitmentapplicationgroup5;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 @SpringBootApplication
 public class RecruitmentApplicationGroup5Application {

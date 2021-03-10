@@ -122,7 +122,7 @@ public class AccountService implements UserDetailsService{
 		return new AccountDTO(accountId, person, username, password);
 	}
 
-	/**OBS: Just nu en mock
+	/**
 	 * Loads a user from the DB by username. Implementation of userdetailservice funciton needed
 	 * for spring security authentication.
 	 * 
