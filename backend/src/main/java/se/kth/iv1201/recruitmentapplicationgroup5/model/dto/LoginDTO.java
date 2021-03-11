@@ -10,15 +10,14 @@ import lombok.Value;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.Account;
 
 /**
- * DTO class for {@link Account}.
+ * DTO class for login details of {@link Account}.
  * 
  */
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Value
 @NoArgsConstructor(force = true)
 @EqualsAndHashCode(callSuper = false)
-public class AccountDTO extends RepresentationModel<AccountDTO> {
+public class LoginDTO extends RepresentationModel<LoginDTO> {
 	private int id;
-	private PersonDTO person;
 	private String username;
 }

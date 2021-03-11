@@ -55,7 +55,7 @@ public class AccountController {
 		createdAccount.add(linkTo(methodOn(AccountController.class).get(createdAccount.getId())).withSelfRel());
 
 		// location
-		URI uri = ServletUriComponentsBuilder.fromCurrentServletMapping().path("api/v1/account/{id}").buildAndExpand(createdAccount.getId())
+		URI uri = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/api/v1/account/" + createdAccount.getId()).buildAndExpand(createdAccount.getId())
 				.toUri();
 		return ResponseEntity.created(uri).body(createdAccount);
 	}

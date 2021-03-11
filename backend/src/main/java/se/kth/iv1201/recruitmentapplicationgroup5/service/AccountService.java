@@ -117,9 +117,8 @@ public class AccountService implements UserDetailsService{
 		
 		var accountId = account.getId();
 		var username = account.getUsername();
-		var password = account.getPassword();
 		
-		return new AccountDTO(accountId, person, username, password);
+		return new AccountDTO(accountId, person, username);
 	}
 
 	/**

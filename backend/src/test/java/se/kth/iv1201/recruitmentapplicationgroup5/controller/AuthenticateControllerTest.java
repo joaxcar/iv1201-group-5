@@ -1,5 +1,6 @@
 package se.kth.iv1201.recruitmentapplicationgroup5.controller;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -103,7 +103,6 @@ class AuthenticateControllerTest {
 				.andExpect(jsonPath("$.person.birthDate").value("1900-05-11"))
 				.andExpect(jsonPath("$.person.email").value("asd@hej.se"))
 				.andExpect(jsonPath("$.username").value(username))
-				.andExpect(jsonPath("$.password").value(password))
 				.andReturn().getResponse().getContentAsString().substring(6, 7);
 	}
 	
