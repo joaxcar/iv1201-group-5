@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.net.URL;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -110,13 +112,13 @@ class UserIntegrationTest {
 	public void returnsAccountDetails() throws Exception {
 		username = "\"username\":\"newuser\"";
 		
-		String id = mockMvc.perform(post("/api/v1/accounts")
+		String location = mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{" + name + ", " + username + ", " + password + ", " + email + ", " + dateOfBirth + "}"))
 				.andExpect(status().isCreated())
-				.andReturn().getResponse().getContentAsString().substring(6, 8);
-				
-		mockMvc.perform(get("/api/v1/account/" + id))
+				.andReturn().getResponse().getHeader("Location");
+		URL url = new URL(location);
+		mockMvc.perform(get(url.getPath()))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.person.name.first").value("Richard"))
 				.andExpect(jsonPath("$.person.name.last").value("Wallin"))
