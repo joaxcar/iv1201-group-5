@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO;
+import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.LoginDTO;
 import se.kth.iv1201.recruitmentapplicationgroup5.service.AccountService;
 import se.kth.iv1201.recruitmentapplicationgroup5.util.JwtUtil;
 
@@ -50,7 +51,7 @@ public class AuthenticateController {
 	 * @throws BadCredentialsException When invalid user credentials are supplied
 	 */
 	@PostMapping(value = "/authenticate")
-	public ResponseEntity<AccountDTO> createAuthenticationToken(
+	public ResponseEntity<LoginDTO> createAuthenticationToken(
 			@Valid @RequestBody AuthenticationRequest req, 
 			HttpServletResponse res
 			) throws BadCredentialsException {
@@ -65,11 +66,11 @@ public class AuthenticateController {
 		jwtCookie.setHttpOnly(false);
 		res.addCookie(jwtCookie);
 		
-		AccountDTO loggedInUserInfo = service.findAccount(user.getUsername()).get(0);
+		AccountDTO accountInfo = service.findAccount(user.getUsername()).get(0);
+		LoginDTO loggedInUserInfo = new LoginDTO(accountInfo.getId(), accountInfo.getUsername());
 		loggedInUserInfo.add(linkTo(methodOn(AccountController.class).get(loggedInUserInfo.getId())).withSelfRel());
 		
 		return ResponseEntity.ok(loggedInUserInfo);
 	}
-	
 
 }

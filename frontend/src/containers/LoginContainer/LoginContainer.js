@@ -18,6 +18,7 @@ function LoginContainer({ onLogin }) {
 		postToAPI(endpoints.AUTHENTICATE, loginDetails)
 			.then((response) => {
 				event.target.reset();
+				console.log(response);
 				onLogin(response.id);
 			})
 			.catch((error) => {
