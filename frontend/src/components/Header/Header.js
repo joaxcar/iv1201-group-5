@@ -1,4 +1,5 @@
 import { Typography, Container } from "@material-ui/core";
+import NavigationBar from "../NavigationBar/NavigationBar";
 import classes from "./header.module.css";
 
 /**
@@ -9,6 +10,7 @@ function Header() {
 		<header className={classes.header}>
 			<Container>
 				<Typography variant="h3">Amusement Park</Typography>
+				<NavigationBar />
 			</Container>
 		</header>
 	);
