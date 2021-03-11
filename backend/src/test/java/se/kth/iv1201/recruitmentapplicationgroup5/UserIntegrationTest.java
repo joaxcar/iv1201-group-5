@@ -58,8 +58,7 @@ class UserIntegrationTest {
 				.andExpect(jsonPath("$.person.name.last").value("Wallin"))
 				.andExpect(jsonPath("$.person.birthDate").value("1900-05-11"))
 				.andExpect(jsonPath("$.person.email").value("asd@hej.se"))
-				.andExpect(jsonPath("$.username").value("rillmeister"))
-				.andExpect(jsonPath("$.password").value("password"));	
+				.andExpect(jsonPath("$.username").value("rillmeister"));
 	}
 	
 	@Test
@@ -124,8 +123,7 @@ class UserIntegrationTest {
 				.andExpect(jsonPath("$.person.name.last").value("Wallin"))
 				.andExpect(jsonPath("$.person.birthDate").value("1900-05-11"))
 				.andExpect(jsonPath("$.person.email").value("asd@hej.se"))
-				.andExpect(jsonPath("$.username").value("newuser"))
-				.andExpect(jsonPath("$.password").value("password"));	
+				.andExpect(jsonPath("$.username").value("newuser"));
 	}
 
 	@Test

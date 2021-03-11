@@ -21,5 +21,4 @@ public class AccountDTO extends RepresentationModel<AccountDTO> {
 	private int id;
 	private PersonDTO person;
 	private String username;
-	private String password;
 }

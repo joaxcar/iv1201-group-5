@@ -59,7 +59,6 @@ class AccountServiceTest {
 		AccountDTO result = accountService.addAccount(details);
 		Assertions.assertEquals(result.getPerson().getName().getFirst(), details.getName().getFirst());
 		Assertions.assertEquals(result.getPerson().getName().getLast(), details.getName().getLast());
-		Assertions.assertEquals(result.getPassword(), details.getPassword());
 		Assertions.assertEquals(result.getUsername(), details.getUsername());
 		Assertions.assertEquals(result.getPerson().getBirthDate(), details.getDateOfBirth());
 		Assertions.assertEquals(result.getPerson().getEmail(), details.getEmail());
