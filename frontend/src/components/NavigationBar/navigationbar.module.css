@@ -1,0 +1,9 @@
+.linkList {
+	list-style-type: none;
+	display: flex;
+	padding: 0;
+}
+
+.listItem {
+	margin-right: 10px;
+}

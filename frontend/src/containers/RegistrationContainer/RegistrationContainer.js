@@ -1,25 +1,34 @@
-import { useState } from "react";
+import { useContext } from "react";
 import Registration from "../../components/Registration/Registration";
 import endpoints from "../../properties/endpoints";
 import { postToAPI } from "../../util/network";
 import alertTypes from "../../properties/alerttypes";
-import Alert from "../../components/Alert/Alert";
+import { AlertContext } from "../../App";
 
-function formatDetails(registrationDetails) {
-	const MONTH_ADJUSTER = 1;
+function formatDetails({
+	firstName,
+	lastName,
+	email,
+	birthYear,
+	birthMonth,
+	birthDay,
+	username,
+	password,
+}) {
+	const dateOfBirth = `${birthYear}-${String(birthMonth).padStart(
+		2,
+		"0"
+	)}-${String(birthDay).padStart(2, "0")}`;
+
 	return {
 		name: {
-			first: registrationDetails.firstName,
-			last: registrationDetails.lastName,
+			first: firstName,
+			last: lastName,
 		},
-		email: registrationDetails.email,
-		dateOfBirth: {
-			year: registrationDetails.dateOfBirth.getFullYear(),
-			month: registrationDetails.dateOfBirth.getMonth() + MONTH_ADJUSTER,
-			day: registrationDetails.dateOfBirth.getDate(),
-		},
-		username: registrationDetails.username,
-		password: registrationDetails.password,
+		email: email,
+		dateOfBirth,
+		username: username,
+		password: password,
 	};
 }
 
@@ -27,36 +36,28 @@ function formatDetails(registrationDetails) {
  * Container for Registration.
  */
 function RegistrationContainer() {
-	const [alert, setAlert] = useState({ open: false, type: "", message: "" });
-
-	function showAlert(type, message) {
-		setAlert({ open: true, type, message });
-		setTimeout(() => setAlert({ ...alert, open: false }), 7000);
-	}
+	const showAlert = useContext(AlertContext);
 
 	function handleFormSubmit(registrationDetails, event) {
 		event.preventDefault();
-		event.target.reset();
-
 		const formattedRegistrationDetails = formatDetails(registrationDetails);
 
 		postToAPI(endpoints.ACCOUNTS, formattedRegistrationDetails)
-			.then((response) =>
-				showAlert(alertTypes.SUCCESS, "Registration was successful")
-			)
-			.catch((error) =>
-				showAlert(alertTypes.ERROR, "Something went wrong")
-			);
+			.then((response) => {
+				event.target.reset();
+				showAlert(alertTypes.SUCCESS, "Registration was successful");
+			})
+			.catch((error) => {
+				if (error.message === "Conflict") {
+					document.getElementsByName("username")[0].value = "";
+					showAlert(alertTypes.ERROR, "User already exists");
+				} else {
+					showAlert(alertTypes.ERROR, "Something went wrong");
+				}
+			});
 	}
 
-	return (
-		<>
-			{alert.open ? (
-				<Alert type={alert.type} message={alert.message} />
-			) : null}
-			<Registration onSubmit={handleFormSubmit} />
-		</>
-	);
+	return <Registration onSubmit={handleFormSubmit} />;
 }
 
 export default RegistrationContainer;
