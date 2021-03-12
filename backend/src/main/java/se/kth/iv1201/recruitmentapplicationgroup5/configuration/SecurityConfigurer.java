@@ -42,6 +42,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 			.antMatchers(HttpMethod.POST, "/api/v1/authenticate").permitAll()
 			.antMatchers(HttpMethod.POST, "/api/v1/accounts").permitAll()
+			.antMatchers("/api/v1/account/{id}/**")
+	          .access("@userSecurity.hasUserId(authentication,#id)")
 			.antMatchers("/api/v1/**").authenticated()
 			.antMatchers("/**").permitAll()
 			.anyRequest().authenticated()
