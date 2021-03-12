@@ -52,6 +52,23 @@ Run the built container.
 sudo docker run -p 8080:8080 regapp:latest
 ```
 
+### Download production build
+Login with azure credentials from project
+```
+docker login iv1201project.azurecr.io
+```
+List images to find hash of latest
+```
+docker image ls iv1201project.azurecr.io/iv1201project/regapp
+```
+Download image
+```
+docker pull iv1201project.azurecr.io/iv1201project/regapp:{hash}
+```
+Run production build, create a env.list file with enviornment variables if needed.
+```
+sudo docker run -p 8080:8080 --env-file env.list iv1201project.azurecr.io/iv1201project/regapp:{hash}
+```
 ## Features
 Done:
 * Sign up as a user
