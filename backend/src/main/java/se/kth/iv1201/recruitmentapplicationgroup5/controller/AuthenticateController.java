@@ -68,7 +68,8 @@ public class AuthenticateController {
 		
 		AccountDTO accountInfo = service.findAccount(user.getUsername()).get(0);
 		LoginDTO loggedInUserInfo = new LoginDTO(accountInfo.getId(), accountInfo.getUsername());
-		loggedInUserInfo.add(linkTo(methodOn(AccountController.class).get(loggedInUserInfo.getId())).withSelfRel());
+		loggedInUserInfo.add(linkTo(AccountController.class).slash("authenticate").withSelfRel());
+		loggedInUserInfo.add(linkTo(methodOn(AccountController.class).get(loggedInUserInfo.getId())).withRel("profile"));
 		
 		return ResponseEntity.ok(loggedInUserInfo);
 	}

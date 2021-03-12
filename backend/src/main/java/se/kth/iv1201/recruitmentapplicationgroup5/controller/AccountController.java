@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.AccountDTO;
+import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDTO;
 import se.kth.iv1201.recruitmentapplicationgroup5.model.dto.RegistrationDetails;
 import se.kth.iv1201.recruitmentapplicationgroup5.service.AccountNotFoundException;
 import se.kth.iv1201.recruitmentapplicationgroup5.service.AccountService;
@@ -51,13 +52,16 @@ public class AccountController {
 		}
 		AccountDTO createdAccount = service.addAccount(registrationDetails);
 
+		RegistrationDTO registration = new RegistrationDTO();
 		// links
-		createdAccount.add(linkTo(methodOn(AccountController.class).get(createdAccount.getId())).withSelfRel());
+		registration.add(linkTo(AccountController.class).slash("accounts").withSelfRel());
+		registration.add(linkTo(AccountController.class).slash("authenticate").withRel("login"));
+		registration.add(linkTo(methodOn(AccountController.class).get(createdAccount.getId())).withRel("profile"));
 
 		// location
 		URI uri = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/api/v1/account/" + createdAccount.getId()).buildAndExpand(createdAccount.getId())
 				.toUri();
-		return ResponseEntity.created(uri).body(createdAccount);
+		return ResponseEntity.created(uri).body(registration);
 	}
 
 	/**

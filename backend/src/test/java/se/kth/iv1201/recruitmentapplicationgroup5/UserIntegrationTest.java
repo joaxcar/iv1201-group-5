@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.jayway.jsonpath.JsonPath;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -111,11 +113,15 @@ class UserIntegrationTest {
 	public void returnsAccountDetails() throws Exception {
 		username = "\"username\":\"newuser\"";
 		
-		String location = mockMvc.perform(post("/api/v1/accounts")
+		String result = mockMvc.perform(post("/api/v1/accounts")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{" + name + ", " + username + ", " + password + ", " + email + ", " + dateOfBirth + "}"))
 				.andExpect(status().isCreated())
-				.andReturn().getResponse().getHeader("Location");
+				.andReturn().getResponse().getContentAsString();
+	
+		System.out.println(result);
+		String location = JsonPath.read(result, "$._links.profile.href");
+		System.out.println(location);
 		URL url = new URL(location);
 		mockMvc.perform(get(url.getPath()))
 				.andExpect(status().isOk())
