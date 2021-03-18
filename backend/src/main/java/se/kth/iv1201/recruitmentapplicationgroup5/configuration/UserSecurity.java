@@ -21,8 +21,6 @@ public class UserSecurity {
 	 */
 	public boolean hasUserId(Authentication authentication, int id) {
 		Account account = (Account) authentication.getPrincipal();
-		System.out.println(id);
-		System.out.println(account.getId());
 		return account.getId() == id;
 	}
 }
